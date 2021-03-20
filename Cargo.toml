@@ -6,6 +6,7 @@ members = [
     "sv-parser-parser",
     "sv-parser-pp",
     "sv-parser-syntaxtree",
+    "sv-parser-symboltable",
 ]
 
 [patch.crates-io]
