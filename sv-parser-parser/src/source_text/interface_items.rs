@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn interface_or_generate_item(s: Span) -> IResult<Span, InterfaceOrGenerateItem> {
     alt((
         interface_or_generate_item_module,
@@ -11,9 +11,9 @@ pub(crate) fn interface_or_generate_item(s: Span) -> IResult<Span, InterfaceOrGe
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn interface_or_generate_item_module(s: Span) -> IResult<Span, InterfaceOrGenerateItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = module_common_item(s)?;
@@ -23,8 +23,8 @@ pub(crate) fn interface_or_generate_item_module(s: Span) -> IResult<Span, Interf
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn interface_or_generate_item_extern(s: Span) -> IResult<Span, InterfaceOrGenerateItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = extern_tf_declaration(s)?;
@@ -34,14 +34,14 @@ pub(crate) fn interface_or_generate_item_extern(s: Span) -> IResult<Span, Interf
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn extern_tf_declaration(s: Span) -> IResult<Span, ExternTfDeclaration> {
     alt((extern_tf_declaration_method, extern_tf_declaration_task))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn extern_tf_declaration_method(s: Span) -> IResult<Span, ExternTfDeclaration> {
     let (s, a) = keyword("extern")(s)?;
     let (s, b) = method_prototype(s)?;
@@ -52,8 +52,8 @@ pub(crate) fn extern_tf_declaration_method(s: Span) -> IResult<Span, ExternTfDec
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn extern_tf_declaration_task(s: Span) -> IResult<Span, ExternTfDeclaration> {
     let (s, a) = keyword("extern")(s)?;
     let (s, b) = keyword("forkjoin")(s)?;
@@ -67,8 +67,8 @@ pub(crate) fn extern_tf_declaration_task(s: Span) -> IResult<Span, ExternTfDecla
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn interface_item(s: Span) -> IResult<Span, InterfaceItem> {
     alt((
         map(pair(port_declaration, symbol(";")), |x| {
@@ -80,8 +80,8 @@ pub(crate) fn interface_item(s: Span) -> IResult<Span, InterfaceItem> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn non_port_interface_item(s: Span) -> IResult<Span, NonPortInterfaceItem> {
     alt((
         map(generate_region, |x| {

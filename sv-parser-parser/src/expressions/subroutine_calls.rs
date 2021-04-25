@@ -2,15 +2,15 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_function_call(s: Span) -> IResult<Span, ConstantFunctionCall> {
     let (s, a) = function_subroutine_call(s)?;
     Ok((s, ConstantFunctionCall { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn tf_call(s: Span) -> IResult<Span, TfCall> {
     let (s, a) = ps_or_hierarchical_tf_identifier(s)?;
     let (s, b) = many0(attribute_instance)(s)?;
@@ -18,8 +18,8 @@ pub(crate) fn tf_call(s: Span) -> IResult<Span, TfCall> {
     Ok((s, TfCall { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn system_tf_call(s: Span) -> IResult<Span, SystemTfCall> {
     alt((
         system_tf_call_arg_expression,
@@ -28,8 +28,8 @@ pub(crate) fn system_tf_call(s: Span) -> IResult<Span, SystemTfCall> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn system_tf_call_arg_optional(s: Span) -> IResult<Span, SystemTfCall> {
     let (s, a) = system_tf_identifier(s)?;
     let (s, b) = opt(paren(list_of_arguments))(s)?;
@@ -39,8 +39,8 @@ pub(crate) fn system_tf_call_arg_optional(s: Span) -> IResult<Span, SystemTfCall
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn system_tf_call_arg_data_type(s: Span) -> IResult<Span, SystemTfCall> {
     let (s, a) = system_tf_identifier(s)?;
     let (s, b) = paren(pair(data_type, opt(pair(symbol(","), expression))))(s)?;
@@ -50,8 +50,8 @@ pub(crate) fn system_tf_call_arg_data_type(s: Span) -> IResult<Span, SystemTfCal
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn system_tf_call_arg_expression(s: Span) -> IResult<Span, SystemTfCall> {
     let (s, a) = system_tf_identifier(s)?;
     let (s, b) = paren(pair(
@@ -67,8 +67,8 @@ pub(crate) fn system_tf_call_arg_expression(s: Span) -> IResult<Span, SystemTfCa
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn subroutine_call(s: Span) -> IResult<Span, SubroutineCall> {
     alt((
         subroutine_call_randomize,
@@ -80,8 +80,8 @@ pub(crate) fn subroutine_call(s: Span) -> IResult<Span, SubroutineCall> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn subroutine_call_randomize(s: Span) -> IResult<Span, SubroutineCall> {
     let (s, a) = opt(pair(keyword("std"), symbol("::")))(s)?;
     let (s, b) = randomize_call(s)?;
@@ -91,21 +91,21 @@ pub(crate) fn subroutine_call_randomize(s: Span) -> IResult<Span, SubroutineCall
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn function_subroutine_call(s: Span) -> IResult<Span, FunctionSubroutineCall> {
     map(subroutine_call, |x| FunctionSubroutineCall { nodes: (x,) })(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn list_of_arguments(s: Span) -> IResult<Span, ListOfArguments> {
     alt((list_of_arguments_named, list_of_arguments_ordered))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn list_of_arguments_ordered(s: Span) -> IResult<Span, ListOfArguments> {
     let (s, a) = list(
         terminated(symbol(","), peek(not(symbol(".")))),
@@ -123,8 +123,8 @@ pub(crate) fn list_of_arguments_ordered(s: Span) -> IResult<Span, ListOfArgument
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn list_of_arguments_named(s: Span) -> IResult<Span, ListOfArguments> {
     let (s, a) = symbol(".")(s)?;
     let (s, b) = identifier(s)?;
@@ -143,9 +143,9 @@ pub(crate) fn list_of_arguments_named(s: Span) -> IResult<Span, ListOfArguments>
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn method_call(s: Span) -> IResult<Span, MethodCall> {
     let (s, a) = method_call_root(s)?;
     let (s, b) = symbol(".")(s)?;
@@ -154,8 +154,8 @@ pub(crate) fn method_call(s: Span) -> IResult<Span, MethodCall> {
     Ok((s, MethodCall { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn method_call_body(s: Span) -> IResult<Span, MethodCallBody> {
     alt((
         map(built_in_method_call, |x| {
@@ -165,8 +165,8 @@ pub(crate) fn method_call_body(s: Span) -> IResult<Span, MethodCallBody> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn method_call_body_user(s: Span) -> IResult<Span, MethodCallBody> {
     let (s, a) = method_identifier(s)?;
     let (s, b) = many0(attribute_instance)(s)?;
@@ -177,8 +177,8 @@ pub(crate) fn method_call_body_user(s: Span) -> IResult<Span, MethodCallBody> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn built_in_method_call(s: Span) -> IResult<Span, BuiltInMethodCall> {
     alt((
         map(randomize_call, |x| {
@@ -190,8 +190,8 @@ pub(crate) fn built_in_method_call(s: Span) -> IResult<Span, BuiltInMethodCall> 
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn array_manipulation_call(s: Span) -> IResult<Span, ArrayManipulationCall> {
     let (s, a) = array_method_name(s)?;
     let (s, b) = many0(attribute_instance)(s)?;
@@ -205,8 +205,8 @@ pub(crate) fn array_manipulation_call(s: Span) -> IResult<Span, ArrayManipulatio
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn randomize_call(s: Span) -> IResult<Span, RandomizeCall> {
     let (s, a) = keyword("randomize")(s)?;
     let (s, b) = many0(attribute_instance)(s)?;
@@ -224,8 +224,8 @@ pub(crate) fn randomize_call(s: Span) -> IResult<Span, RandomizeCall> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn variable_identifier_list_or_null(
     s: Span,
 ) -> IResult<Span, VariableIdentifierListOrNull> {
@@ -239,8 +239,8 @@ pub(crate) fn variable_identifier_list_or_null(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn method_call_root(s: Span) -> IResult<Span, MethodCallRoot> {
     alt((
         map(primary_method_call_root, |x| {
@@ -252,8 +252,8 @@ pub(crate) fn method_call_root(s: Span) -> IResult<Span, MethodCallRoot> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn primary_method_call_root(s: Span) -> IResult<Span, Primary> {
     alt((
         map(keyword("$"), |x| Primary::Dollar(Box::new(x))),
@@ -284,8 +284,8 @@ pub(crate) fn primary_method_call_root(s: Span) -> IResult<Span, Primary> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn primary_hierarchical_method_call_root(s: Span) -> IResult<Span, Primary> {
     let (s, a) = opt(class_qualifier_or_package_scope)(s)?;
     let (s, b) = hierarchical_identifier_method_call_root(s)?;
@@ -296,8 +296,8 @@ pub(crate) fn primary_hierarchical_method_call_root(s: Span) -> IResult<Span, Pr
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn hierarchical_identifier_method_call_root(
     s: Span,
 ) -> IResult<Span, HierarchicalIdentifier> {
@@ -310,8 +310,8 @@ pub(crate) fn hierarchical_identifier_method_call_root(
     Ok((s, HierarchicalIdentifier { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn select_method_call_root(s: Span) -> IResult<Span, Select> {
     let (s, a) = opt(terminated(
         triple(
@@ -329,8 +329,8 @@ pub(crate) fn select_method_call_root(s: Span) -> IResult<Span, Select> {
     Ok((s, Select { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn array_method_name(s: Span) -> IResult<Span, ArrayMethodName> {
     alt((
         map(keyword("unique"), |x| ArrayMethodName::Unique(Box::new(x))),

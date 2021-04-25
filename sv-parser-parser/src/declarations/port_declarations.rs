@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn inout_declaration(s: Span) -> IResult<Span, InoutDeclaration> {
     let (s, a) = keyword("inout")(s)?;
     let (s, b) = net_port_type(s)?;
@@ -11,14 +11,14 @@ pub(crate) fn inout_declaration(s: Span) -> IResult<Span, InoutDeclaration> {
     Ok((s, InoutDeclaration { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn input_declaration(s: Span) -> IResult<Span, InputDeclaration> {
     alt((input_declaration_net, input_declaration_variable))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn input_declaration_net(s: Span) -> IResult<Span, InputDeclaration> {
     let (s, a) = keyword("input")(s)?;
     let (s, b) = net_port_type(s)?;
@@ -29,8 +29,8 @@ pub(crate) fn input_declaration_net(s: Span) -> IResult<Span, InputDeclaration> 
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn input_declaration_variable(s: Span) -> IResult<Span, InputDeclaration> {
     let (s, a) = keyword("input")(s)?;
     let (s, b) = variable_port_type(s)?;
@@ -41,14 +41,14 @@ pub(crate) fn input_declaration_variable(s: Span) -> IResult<Span, InputDeclarat
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn output_declaration(s: Span) -> IResult<Span, OutputDeclaration> {
     alt((output_declaration_net, output_declaration_variable))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn output_declaration_net(s: Span) -> IResult<Span, OutputDeclaration> {
     let (s, a) = keyword("output")(s)?;
     let (s, b) = net_port_type(s)?;
@@ -59,8 +59,8 @@ pub(crate) fn output_declaration_net(s: Span) -> IResult<Span, OutputDeclaration
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn output_declaration_variable(s: Span) -> IResult<Span, OutputDeclaration> {
     let (s, a) = keyword("output")(s)?;
     let (s, b) = variable_port_type(s)?;
@@ -71,8 +71,8 @@ pub(crate) fn output_declaration_variable(s: Span) -> IResult<Span, OutputDeclar
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn interface_port_declaration(s: Span) -> IResult<Span, InterfacePortDeclaration> {
     let (s, a) = interface_identifier(s)?;
     let (s, b) = opt(pair(symbol("."), modport_identifier))(s)?;
@@ -80,8 +80,8 @@ pub(crate) fn interface_port_declaration(s: Span) -> IResult<Span, InterfacePort
     Ok((s, InterfacePortDeclaration { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn ref_declaration(s: Span) -> IResult<Span, RefDeclaration> {
     let (s, a) = keyword("ref")(s)?;
     let (s, b) = variable_port_type(s)?;

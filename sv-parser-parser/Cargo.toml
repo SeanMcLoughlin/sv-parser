@@ -14,8 +14,10 @@ edition = "2018"
 disable-tag = true
 
 [features]
-default = []
+default = ["packrat", "recursive"]
 trace   = ["nom-tracable/trace"]
+packrat = []
+recursive = []
 
 [dependencies]
 nom                  = "6"

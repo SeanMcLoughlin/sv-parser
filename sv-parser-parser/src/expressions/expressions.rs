@@ -2,14 +2,14 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn inc_or_dec_expression(s: Span) -> IResult<Span, IncOrDecExpression> {
     alt((inc_or_dec_expression_prefix, inc_or_dec_expression_suffix))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn inc_or_dec_expression_prefix(s: Span) -> IResult<Span, IncOrDecExpression> {
     let (s, a) = inc_or_dec_operator(s)?;
     let (s, b) = many0(attribute_instance)(s)?;
@@ -20,9 +20,9 @@ pub(crate) fn inc_or_dec_expression_prefix(s: Span) -> IResult<Span, IncOrDecExp
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn inc_or_dec_expression_suffix(s: Span) -> IResult<Span, IncOrDecExpression> {
     let (s, a) = variable_lvalue(s)?;
     let (s, b) = many0(attribute_instance)(s)?;
@@ -33,9 +33,9 @@ pub(crate) fn inc_or_dec_expression_suffix(s: Span) -> IResult<Span, IncOrDecExp
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn conditional_expression(s: Span) -> IResult<Span, ConditionalExpression> {
     let (s, a) = cond_predicate_ternary(s)?;
     let (s, b) = symbol("?")(s)?;
@@ -51,16 +51,16 @@ pub(crate) fn conditional_expression(s: Span) -> IResult<Span, ConditionalExpres
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn cond_predicate_ternary(s: Span) -> IResult<Span, CondPredicate> {
     let (s, a) = list(symbol("&&&"), expression_or_cond_pattern_ternary)(s)?;
     Ok((s, CondPredicate { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn expression_or_cond_pattern_ternary(
     s: Span,
 ) -> IResult<Span, ExpressionOrCondPattern> {
@@ -74,8 +74,8 @@ pub(crate) fn expression_or_cond_pattern_ternary(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_expression(s: Span) -> IResult<Span, ConstantExpression> {
     alt((
         constant_expression_ternary,
@@ -87,8 +87,8 @@ pub(crate) fn constant_expression(s: Span) -> IResult<Span, ConstantExpression> 
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_expression_unary(s: Span) -> IResult<Span, ConstantExpression> {
     let (s, a) = unary_operator(s)?;
     let (s, b) = many0(attribute_instance)(s)?;
@@ -99,9 +99,9 @@ pub(crate) fn constant_expression_unary(s: Span) -> IResult<Span, ConstantExpres
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_expression_binary(s: Span) -> IResult<Span, ConstantExpression> {
     let (s, a) = constant_expression(s)?;
     let (s, b) = binary_operator(s)?;
@@ -115,9 +115,9 @@ pub(crate) fn constant_expression_binary(s: Span) -> IResult<Span, ConstantExpre
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_expression_ternary(s: Span) -> IResult<Span, ConstantExpression> {
     let (s, a) = constant_expression(s)?;
     let (s, b) = symbol("?")(s)?;
@@ -133,8 +133,8 @@ pub(crate) fn constant_expression_ternary(s: Span) -> IResult<Span, ConstantExpr
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_mintypmax_expression(s: Span) -> IResult<Span, ConstantMintypmaxExpression> {
     alt((
         constant_mintypmax_expression_ternary,
@@ -144,9 +144,9 @@ pub(crate) fn constant_mintypmax_expression(s: Span) -> IResult<Span, ConstantMi
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_mintypmax_expression_ternary(
     s: Span,
 ) -> IResult<Span, ConstantMintypmaxExpression> {
@@ -163,8 +163,8 @@ pub(crate) fn constant_mintypmax_expression_ternary(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_param_expression(s: Span) -> IResult<Span, ConstantParamExpression> {
     alt((
         map(constant_mintypmax_expression, |x| {
@@ -179,8 +179,8 @@ pub(crate) fn constant_param_expression(s: Span) -> IResult<Span, ConstantParamE
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn param_expression(s: Span) -> IResult<Span, ParamExpression> {
     alt((
         map(terminated(mintypmax_expression, peek(none_of("#"))), |x| {
@@ -191,8 +191,8 @@ pub(crate) fn param_expression(s: Span) -> IResult<Span, ParamExpression> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_range_expression(s: Span) -> IResult<Span, ConstantRangeExpression> {
     alt((
         map(constant_part_select_range, |x| {
@@ -204,8 +204,8 @@ pub(crate) fn constant_range_expression(s: Span) -> IResult<Span, ConstantRangeE
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_part_select_range(s: Span) -> IResult<Span, ConstantPartSelectRange> {
     alt((
         map(constant_range, |x| {
@@ -217,9 +217,9 @@ pub(crate) fn constant_part_select_range(s: Span) -> IResult<Span, ConstantPartS
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_range(s: Span) -> IResult<Span, ConstantRange> {
     let (s, a) = constant_expression(s)?;
     let (s, b) = symbol(":")(s)?;
@@ -227,9 +227,9 @@ pub(crate) fn constant_range(s: Span) -> IResult<Span, ConstantRange> {
     Ok((s, ConstantRange { nodes: (a, b, c) }))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn constant_indexed_range(s: Span) -> IResult<Span, ConstantIndexedRange> {
     let (s, a) = constant_expression(s)?;
     let (s, b) = alt((symbol("+:"), symbol("-:")))(s)?;
@@ -237,8 +237,8 @@ pub(crate) fn constant_indexed_range(s: Span) -> IResult<Span, ConstantIndexedRa
     Ok((s, ConstantIndexedRange { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn expression(s: Span) -> IResult<Span, Expression> {
     alt((
         map(terminated(primary, peek(one_of(",();"))), |x| {
@@ -263,8 +263,8 @@ pub(crate) fn expression(s: Span) -> IResult<Span, Expression> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn expression_unary(s: Span) -> IResult<Span, Expression> {
     let (s, x) = unary_operator(s)?;
     let (s, y) = many0(attribute_instance)(s)?;
@@ -275,8 +275,8 @@ pub(crate) fn expression_unary(s: Span) -> IResult<Span, Expression> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn expression_operator_assignment(s: Span) -> IResult<Span, Expression> {
     let (s, a) = paren(operator_assignment)(s)?;
     Ok((
@@ -285,9 +285,9 @@ pub(crate) fn expression_operator_assignment(s: Span) -> IResult<Span, Expressio
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn expression_binary(s: Span) -> IResult<Span, Expression> {
     let (s, a) = expression(s)?;
     let (s, b) = binary_operator(s)?;
@@ -301,8 +301,8 @@ pub(crate) fn expression_binary(s: Span) -> IResult<Span, Expression> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn tagged_union_expression(s: Span) -> IResult<Span, TaggedUnionExpression> {
     let (s, a) = keyword("tagged")(s)?;
     let (s, b) = member_identifier(s)?;
@@ -310,9 +310,9 @@ pub(crate) fn tagged_union_expression(s: Span) -> IResult<Span, TaggedUnionExpre
     Ok((s, TaggedUnionExpression { nodes: (a, b, c) }))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn inside_expression(s: Span) -> IResult<Span, InsideExpression> {
     let (s, a) = expression(s)?;
     let (s, b) = keyword("inside")(s)?;
@@ -320,8 +320,8 @@ pub(crate) fn inside_expression(s: Span) -> IResult<Span, InsideExpression> {
     Ok((s, InsideExpression { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn value_range(s: Span) -> IResult<Span, ValueRange> {
     alt((
         value_range_binary,
@@ -329,8 +329,8 @@ pub(crate) fn value_range(s: Span) -> IResult<Span, ValueRange> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn value_range_binary(s: Span) -> IResult<Span, ValueRange> {
     let (s, a) = bracket(triple(expression, symbol(":"), expression))(s)?;
     Ok((
@@ -339,8 +339,8 @@ pub(crate) fn value_range_binary(s: Span) -> IResult<Span, ValueRange> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn mintypmax_expression(s: Span) -> IResult<Span, MintypmaxExpression> {
     alt((
         mintypmax_expression_ternary,
@@ -348,9 +348,9 @@ pub(crate) fn mintypmax_expression(s: Span) -> IResult<Span, MintypmaxExpression
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn mintypmax_expression_ternary(s: Span) -> IResult<Span, MintypmaxExpression> {
     let (s, a) = expression(s)?;
     let (s, b) = symbol(":")(s)?;
@@ -365,9 +365,9 @@ pub(crate) fn mintypmax_expression_ternary(s: Span) -> IResult<Span, MintypmaxEx
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_path_conditional_expression(
     s: Span,
 ) -> IResult<Span, ModulePathConditionalExpression> {
@@ -385,8 +385,8 @@ pub(crate) fn module_path_conditional_expression(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_path_expression(s: Span) -> IResult<Span, ModulePathExpression> {
     alt((
         module_path_expression_binary,
@@ -400,8 +400,8 @@ pub(crate) fn module_path_expression(s: Span) -> IResult<Span, ModulePathExpress
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_path_expression_unary(s: Span) -> IResult<Span, ModulePathExpression> {
     let (s, a) = unary_module_path_operator(s)?;
     let (s, b) = many0(attribute_instance)(s)?;
@@ -412,9 +412,9 @@ pub(crate) fn module_path_expression_unary(s: Span) -> IResult<Span, ModulePathE
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_path_expression_binary(s: Span) -> IResult<Span, ModulePathExpression> {
     let (s, a) = module_path_expression(s)?;
     let (s, b) = binary_module_path_operator(s)?;
@@ -428,8 +428,8 @@ pub(crate) fn module_path_expression_binary(s: Span) -> IResult<Span, ModulePath
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_path_mintypmax_expression(
     s: Span,
 ) -> IResult<Span, ModulePathMintypmaxExpression> {
@@ -441,9 +441,9 @@ pub(crate) fn module_path_mintypmax_expression(
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_path_mintypmax_expression_ternary(
     s: Span,
 ) -> IResult<Span, ModulePathMintypmaxExpression> {
@@ -460,8 +460,8 @@ pub(crate) fn module_path_mintypmax_expression_ternary(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn part_select_range(s: Span) -> IResult<Span, PartSelectRange> {
     alt((
         map(constant_range, |x| {
@@ -473,9 +473,9 @@ pub(crate) fn part_select_range(s: Span) -> IResult<Span, PartSelectRange> {
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn indexed_range(s: Span) -> IResult<Span, IndexedRange> {
     let (s, a) = expression(s)?;
     let (s, b) = alt((symbol("+:"), symbol("-:")))(s)?;
@@ -483,8 +483,8 @@ pub(crate) fn indexed_range(s: Span) -> IResult<Span, IndexedRange> {
     Ok((s, IndexedRange { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn genvar_expression(s: Span) -> IResult<Span, GenvarExpression> {
     let (s, a) = constant_expression(s)?;
     Ok((s, GenvarExpression { nodes: (a,) }))

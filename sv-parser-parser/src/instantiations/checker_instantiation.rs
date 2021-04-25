@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn checker_instantiation(s: Span) -> IResult<Span, CheckerInstantiation> {
     let (s, a) = ps_checker_identifier(s)?;
     let (s, b) = name_of_instance(s)?;
@@ -17,8 +17,8 @@ pub(crate) fn checker_instantiation(s: Span) -> IResult<Span, CheckerInstantiati
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn list_of_checker_port_connections(
     s: Span,
 ) -> IResult<Span, ListOfCheckerPortConnections> {
@@ -28,9 +28,9 @@ pub(crate) fn list_of_checker_port_connections(
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn list_of_checker_port_connections_ordered(
     s: Span,
 ) -> IResult<Span, ListOfCheckerPortConnections> {
@@ -43,8 +43,8 @@ pub(crate) fn list_of_checker_port_connections_ordered(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn list_of_checker_port_connections_named(
     s: Span,
 ) -> IResult<Span, ListOfCheckerPortConnections> {
@@ -57,9 +57,9 @@ pub(crate) fn list_of_checker_port_connections_named(
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn ordered_checker_port_connection(
     s: Span,
 ) -> IResult<Span, OrderedCheckerPortConnection> {
@@ -68,8 +68,8 @@ pub(crate) fn ordered_checker_port_connection(
     Ok((s, OrderedCheckerPortConnection { nodes: (x, y) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn named_checker_port_connection(s: Span) -> IResult<Span, NamedCheckerPortConnection> {
     alt((
         named_checker_port_connection_identifier,
@@ -77,8 +77,8 @@ pub(crate) fn named_checker_port_connection(s: Span) -> IResult<Span, NamedCheck
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn named_checker_port_connection_identifier(
     s: Span,
 ) -> IResult<Span, NamedCheckerPortConnection> {
@@ -93,8 +93,8 @@ pub(crate) fn named_checker_port_connection_identifier(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn named_checker_port_connection_asterisk(
     s: Span,
 ) -> IResult<Span, NamedCheckerPortConnection> {

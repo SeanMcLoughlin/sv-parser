@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn function_data_type_or_implicit(s: Span) -> IResult<Span, FunctionDataTypeOrImplicit> {
     alt((
         map(
@@ -29,8 +29,8 @@ pub(crate) fn function_data_type_or_implicit(s: Span) -> IResult<Span, FunctionD
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn function_declaration(s: Span) -> IResult<Span, FunctionDeclaration> {
     let (s, a) = keyword("function")(s)?;
     let (s, b) = opt(lifetime)(s)?;
@@ -38,8 +38,8 @@ pub(crate) fn function_declaration(s: Span) -> IResult<Span, FunctionDeclaration
     Ok((s, FunctionDeclaration { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn function_body_declaration(s: Span) -> IResult<Span, FunctionBodyDeclaration> {
     alt((
         function_body_declaration_without_port,
@@ -47,8 +47,8 @@ pub(crate) fn function_body_declaration(s: Span) -> IResult<Span, FunctionBodyDe
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn function_body_declaration_without_port(
     s: Span,
 ) -> IResult<Span, FunctionBodyDeclaration> {
@@ -67,8 +67,8 @@ pub(crate) fn function_body_declaration_without_port(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn function_body_declaration_with_port(
     s: Span,
 ) -> IResult<Span, FunctionBodyDeclaration> {
@@ -88,8 +88,8 @@ pub(crate) fn function_body_declaration_with_port(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn interface_identifier_or_class_scope(
     s: Span,
 ) -> IResult<Span, InterfaceIdentifierOrClassScope> {
@@ -103,8 +103,8 @@ pub(crate) fn interface_identifier_or_class_scope(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn function_prototype(s: Span) -> IResult<Span, FunctionPrototype> {
     let (s, a) = keyword("function")(s)?;
     let (s, b) = data_type_or_void(s)?;
@@ -118,8 +118,8 @@ pub(crate) fn function_prototype(s: Span) -> IResult<Span, FunctionPrototype> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn dpi_import_export(s: Span) -> IResult<Span, DpiImportExport> {
     alt((
         dpi_import_export_import_function,
@@ -129,8 +129,8 @@ pub(crate) fn dpi_import_export(s: Span) -> IResult<Span, DpiImportExport> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn dpi_import_export_import_function(s: Span) -> IResult<Span, DpiImportExport> {
     let (s, a) = keyword("import")(s)?;
     let (s, b) = dpi_spec_string(s)?;
@@ -146,8 +146,8 @@ pub(crate) fn dpi_import_export_import_function(s: Span) -> IResult<Span, DpiImp
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn dpi_import_export_import_task(s: Span) -> IResult<Span, DpiImportExport> {
     let (s, a) = keyword("import")(s)?;
     let (s, b) = dpi_spec_string(s)?;
@@ -163,8 +163,8 @@ pub(crate) fn dpi_import_export_import_task(s: Span) -> IResult<Span, DpiImportE
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn dpi_import_export_export_function(s: Span) -> IResult<Span, DpiImportExport> {
     let (s, a) = keyword("export")(s)?;
     let (s, b) = dpi_spec_string(s)?;
@@ -180,8 +180,8 @@ pub(crate) fn dpi_import_export_export_function(s: Span) -> IResult<Span, DpiImp
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn dpi_import_export_export_task(s: Span) -> IResult<Span, DpiImportExport> {
     let (s, a) = keyword("export")(s)?;
     let (s, b) = dpi_spec_string(s)?;
@@ -197,8 +197,8 @@ pub(crate) fn dpi_import_export_export_task(s: Span) -> IResult<Span, DpiImportE
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn dpi_spec_string(s: Span) -> IResult<Span, DpiSpecString> {
     alt((
         map(keyword("\"DPI-C\""), |x| DpiSpecString::DpiC(Box::new(x))),
@@ -206,8 +206,8 @@ pub(crate) fn dpi_spec_string(s: Span) -> IResult<Span, DpiSpecString> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn dpi_function_import_property(s: Span) -> IResult<Span, DpiFunctionImportProperty> {
     alt((
         map(keyword("context"), |x| {
@@ -219,22 +219,22 @@ pub(crate) fn dpi_function_import_property(s: Span) -> IResult<Span, DpiFunction
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn dpi_task_import_property(s: Span) -> IResult<Span, DpiTaskImportProperty> {
     let (s, a) = keyword("context")(s)?;
     Ok((s, DpiTaskImportProperty::Context(Box::new(a))))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn dpi_function_proto(s: Span) -> IResult<Span, DpiFunctionProto> {
     let (s, a) = function_prototype(s)?;
     Ok((s, DpiFunctionProto { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn dpi_task_proto(s: Span) -> IResult<Span, DpiTaskProto> {
     let (s, a) = task_prototype(s)?;
     Ok((s, DpiTaskProto { nodes: (a,) }))

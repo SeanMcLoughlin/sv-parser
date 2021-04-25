@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn path_delay_value(s: Span) -> IResult<Span, PathDelayValue> {
     alt((
         map(list_of_path_delay_expressions, |x| {
@@ -13,8 +13,8 @@ pub(crate) fn path_delay_value(s: Span) -> IResult<Span, PathDelayValue> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn path_delay_value_paren(s: Span) -> IResult<Span, PathDelayValue> {
     let (s, a) = paren(list_of_path_delay_expressions)(s)?;
     Ok((
@@ -23,29 +23,29 @@ pub(crate) fn path_delay_value_paren(s: Span) -> IResult<Span, PathDelayValue> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn list_of_path_delay_expressions(s: Span) -> IResult<Span, ListOfPathDelayExpressions> {
     let (s, a) = list(symbol(","), t_path_delay_expression)(s)?;
     Ok((s, ListOfPathDelayExpressions { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn t_path_delay_expression(s: Span) -> IResult<Span, TPathDelayExpression> {
     let (s, a) = path_delay_expression(s)?;
     Ok((s, TPathDelayExpression { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn path_delay_expression(s: Span) -> IResult<Span, PathDelayExpression> {
     let (s, a) = constant_mintypmax_expression(s)?;
     Ok((s, PathDelayExpression { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn edge_sensitive_path_declaration(
     s: Span,
 ) -> IResult<Span, EdgeSensitivePathDeclaration> {
@@ -55,8 +55,8 @@ pub(crate) fn edge_sensitive_path_declaration(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn edge_sensitive_path_declaration_parallel(
     s: Span,
 ) -> IResult<Span, EdgeSensitivePathDeclaration> {
@@ -71,8 +71,8 @@ pub(crate) fn edge_sensitive_path_declaration_parallel(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn edge_sensitive_path_declaration_full(
     s: Span,
 ) -> IResult<Span, EdgeSensitivePathDeclaration> {
@@ -87,8 +87,8 @@ pub(crate) fn edge_sensitive_path_declaration_full(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn parallel_edge_sensitive_path_description(
     s: Span,
 ) -> IResult<Span, ParallelEdgeSensitivePathDescription> {
@@ -107,8 +107,8 @@ pub(crate) fn parallel_edge_sensitive_path_description(
     Ok((s, ParallelEdgeSensitivePathDescription { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn full_edge_sensitive_path_description(
     s: Span,
 ) -> IResult<Span, FullEdgeSensitivePathDescription> {
@@ -127,15 +127,15 @@ pub(crate) fn full_edge_sensitive_path_description(
     Ok((s, FullEdgeSensitivePathDescription { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn data_source_expression(s: Span) -> IResult<Span, DataSourceExpression> {
     let (s, a) = expression(s)?;
     Ok((s, DataSourceExpression { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn edge_identifier(s: Span) -> IResult<Span, EdgeIdentifier> {
     alt((
         map(keyword("posedge"), |x| EdgeIdentifier::Posedge(Box::new(x))),
@@ -144,8 +144,8 @@ pub(crate) fn edge_identifier(s: Span) -> IResult<Span, EdgeIdentifier> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn state_dependent_path_declaration(
     s: Span,
 ) -> IResult<Span, StateDependentPathDeclaration> {
@@ -156,8 +156,8 @@ pub(crate) fn state_dependent_path_declaration(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn state_dependent_path_declaration_if_simple(
     s: Span,
 ) -> IResult<Span, StateDependentPathDeclaration> {
@@ -172,8 +172,8 @@ pub(crate) fn state_dependent_path_declaration_if_simple(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn state_dependent_path_declaration_if_edge_sensitive(
     s: Span,
 ) -> IResult<Span, StateDependentPathDeclaration> {
@@ -188,8 +188,8 @@ pub(crate) fn state_dependent_path_declaration_if_edge_sensitive(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn state_dependent_path_declaration_if_none(
     s: Span,
 ) -> IResult<Span, StateDependentPathDeclaration> {
@@ -203,8 +203,8 @@ pub(crate) fn state_dependent_path_declaration_if_none(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn polarity_operator(s: Span) -> IResult<Span, PolarityOperator> {
     alt((
         map(symbol("+"), |x| PolarityOperator { nodes: (x,) }),

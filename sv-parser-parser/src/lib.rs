@@ -38,8 +38,13 @@ pub(crate) use nom::multi::*;
 pub(crate) use nom::sequence::*;
 pub(crate) use nom::Err;
 pub(crate) use nom_greedyerror::GreedyError;
-pub(crate) use nom_packrat::{self, packrat_parser, HasExtraState};
-pub(crate) use nom_recursive::{recursive_parser, HasRecursiveInfo, RecursiveInfo};
+#[cfg(feature = "packrat")]
+pub(crate) use nom_packrat::packrat_parser;
+pub(crate) use nom_packrat::{self, HasExtraState};
+#[cfg(feature = "recursive")]
+pub(crate) use nom_recursive::recursive_parser;
+pub(crate) use nom_recursive::{HasRecursiveInfo, RecursiveInfo};
+#[cfg(feature = "trace")]
 pub(crate) use nom_tracable::tracable_parser;
 #[cfg(feature = "trace")]
 pub(crate) use nom_tracable::{HasTracableInfo, TracableInfo};

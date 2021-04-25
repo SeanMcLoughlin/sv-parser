@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_item(s: Span) -> IResult<Span, ClassItem> {
     alt((
         class_item_property,
@@ -21,8 +21,8 @@ pub(crate) fn class_item(s: Span) -> IResult<Span, ClassItem> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_item_property(s: Span) -> IResult<Span, ClassItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = class_property(s)?;
@@ -32,8 +32,8 @@ pub(crate) fn class_item_property(s: Span) -> IResult<Span, ClassItem> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_item_method(s: Span) -> IResult<Span, ClassItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = class_method(s)?;
@@ -43,8 +43,8 @@ pub(crate) fn class_item_method(s: Span) -> IResult<Span, ClassItem> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_item_constraint(s: Span) -> IResult<Span, ClassItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = class_constraint(s)?;
@@ -54,8 +54,8 @@ pub(crate) fn class_item_constraint(s: Span) -> IResult<Span, ClassItem> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_item_declaration(s: Span) -> IResult<Span, ClassItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = class_declaration(s)?;
@@ -65,8 +65,8 @@ pub(crate) fn class_item_declaration(s: Span) -> IResult<Span, ClassItem> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_item_covergroup(s: Span) -> IResult<Span, ClassItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = covergroup_declaration(s)?;
@@ -76,14 +76,14 @@ pub(crate) fn class_item_covergroup(s: Span) -> IResult<Span, ClassItem> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_property(s: Span) -> IResult<Span, ClassProperty> {
     alt((class_property_non_const, class_property_const))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_property_non_const(s: Span) -> IResult<Span, ClassProperty> {
     let (s, a) = many0(property_qualifier)(s)?;
     let (s, b) = data_declaration(s)?;
@@ -93,8 +93,8 @@ pub(crate) fn class_property_non_const(s: Span) -> IResult<Span, ClassProperty> 
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_property_const(s: Span) -> IResult<Span, ClassProperty> {
     let (s, a) = keyword("const")(s)?;
     let (s, b) = many0(class_item_qualifier)(s)?;
@@ -112,8 +112,8 @@ pub(crate) fn class_property_const(s: Span) -> IResult<Span, ClassProperty> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_property_const_expression(
     s: Span,
 ) -> IResult<Span, ClassPropertyConstExpression> {
@@ -127,8 +127,8 @@ pub(crate) fn class_property_const_expression(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_method(s: Span) -> IResult<Span, ClassMethod> {
     alt((
         class_method_task,
@@ -140,8 +140,8 @@ pub(crate) fn class_method(s: Span) -> IResult<Span, ClassMethod> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_method_task(s: Span) -> IResult<Span, ClassMethod> {
     let (s, a) = many0(method_qualifier)(s)?;
     let (s, b) = task_declaration(s)?;
@@ -151,8 +151,8 @@ pub(crate) fn class_method_task(s: Span) -> IResult<Span, ClassMethod> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_method_function(s: Span) -> IResult<Span, ClassMethod> {
     let (s, a) = many0(method_qualifier)(s)?;
     let (s, b) = function_declaration(s)?;
@@ -162,8 +162,8 @@ pub(crate) fn class_method_function(s: Span) -> IResult<Span, ClassMethod> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_method_pure_virtual(s: Span) -> IResult<Span, ClassMethod> {
     let (s, a) = keyword("pure")(s)?;
     let (s, b) = keyword("virtual")(s)?;
@@ -178,8 +178,8 @@ pub(crate) fn class_method_pure_virtual(s: Span) -> IResult<Span, ClassMethod> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_method_extern_method(s: Span) -> IResult<Span, ClassMethod> {
     let (s, a) = keyword("extern")(s)?;
     let (s, b) = many0(method_qualifier)(s)?;
@@ -193,8 +193,8 @@ pub(crate) fn class_method_extern_method(s: Span) -> IResult<Span, ClassMethod> 
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_method_constructor(s: Span) -> IResult<Span, ClassMethod> {
     let (s, a) = many0(method_qualifier)(s)?;
     let (s, b) = class_constructor_declaration(s)?;
@@ -204,8 +204,8 @@ pub(crate) fn class_method_constructor(s: Span) -> IResult<Span, ClassMethod> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_method_extern_constructor(s: Span) -> IResult<Span, ClassMethod> {
     let (s, a) = keyword("extern")(s)?;
     let (s, b) = many0(method_qualifier)(s)?;
@@ -216,8 +216,8 @@ pub(crate) fn class_method_extern_constructor(s: Span) -> IResult<Span, ClassMet
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_constructor_prototype(s: Span) -> IResult<Span, ClassConstructorPrototype> {
     let (s, a) = keyword("function")(s)?;
     let (s, b) = keyword("new")(s)?;
@@ -231,8 +231,8 @@ pub(crate) fn class_constructor_prototype(s: Span) -> IResult<Span, ClassConstru
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_constraint(s: Span) -> IResult<Span, ClassConstraint> {
     alt((
         map(constraint_prototype, |x| {
@@ -244,8 +244,8 @@ pub(crate) fn class_constraint(s: Span) -> IResult<Span, ClassConstraint> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_item_qualifier(s: Span) -> IResult<Span, ClassItemQualifier> {
     alt((
         map(keyword("static"), |x| {
@@ -258,8 +258,8 @@ pub(crate) fn class_item_qualifier(s: Span) -> IResult<Span, ClassItemQualifier>
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_qualifier(s: Span) -> IResult<Span, PropertyQualifier> {
     alt((
         map(random_qualifier, |x| {
@@ -271,8 +271,8 @@ pub(crate) fn property_qualifier(s: Span) -> IResult<Span, PropertyQualifier> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn random_qualifier(s: Span) -> IResult<Span, RandomQualifier> {
     alt((
         map(keyword("randc"), |x| RandomQualifier::Randc(Box::new(x))),
@@ -280,8 +280,8 @@ pub(crate) fn random_qualifier(s: Span) -> IResult<Span, RandomQualifier> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn method_qualifier(s: Span) -> IResult<Span, MethodQualifier> {
     alt((
         map(pair(keyword("pure"), keyword("virtual")), |x| {
@@ -296,8 +296,8 @@ pub(crate) fn method_qualifier(s: Span) -> IResult<Span, MethodQualifier> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn method_prototype(s: Span) -> IResult<Span, MethodPrototype> {
     alt((
         map(task_prototype, |x| {
@@ -309,8 +309,8 @@ pub(crate) fn method_prototype(s: Span) -> IResult<Span, MethodPrototype> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn class_constructor_declaration(s: Span) -> IResult<Span, ClassConstructorDeclaration> {
     let (s, a) = keyword("function")(s)?;
     let (s, b) = opt(class_scope)(s)?;
@@ -335,8 +335,8 @@ pub(crate) fn class_constructor_declaration(s: Span) -> IResult<Span, ClassConst
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn new(s: Span) -> IResult<Span, New> {
     let (s, a) = keyword("new")(s)?;
     Ok((s, New { nodes: (a,) }))

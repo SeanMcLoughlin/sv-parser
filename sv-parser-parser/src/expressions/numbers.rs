@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn number(s: Span) -> IResult<Span, Number> {
     alt((
         map(real_number, |x| Number::RealNumber(Box::new(x))),
@@ -11,8 +11,8 @@ pub(crate) fn number(s: Span) -> IResult<Span, Number> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn integral_number(s: Span) -> IResult<Span, IntegralNumber> {
     alt((
         map(octal_number, |x| IntegralNumber::OctalNumber(Box::new(x))),
@@ -24,8 +24,8 @@ pub(crate) fn integral_number(s: Span) -> IResult<Span, IntegralNumber> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn decimal_number(s: Span) -> IResult<Span, DecimalNumber> {
     alt((
         decimal_number_base_unsigned,
@@ -37,8 +37,8 @@ pub(crate) fn decimal_number(s: Span) -> IResult<Span, DecimalNumber> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn decimal_number_base_unsigned(s: Span) -> IResult<Span, DecimalNumber> {
     let (s, a) = opt(size)(s)?;
     let (s, b) = decimal_base(s)?;
@@ -49,8 +49,8 @@ pub(crate) fn decimal_number_base_unsigned(s: Span) -> IResult<Span, DecimalNumb
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn decimal_number_base_x_number(s: Span) -> IResult<Span, DecimalNumber> {
     let (s, a) = opt(size)(s)?;
     let (s, b) = decimal_base(s)?;
@@ -61,8 +61,8 @@ pub(crate) fn decimal_number_base_x_number(s: Span) -> IResult<Span, DecimalNumb
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn decimal_number_base_z_number(s: Span) -> IResult<Span, DecimalNumber> {
     let (s, a) = opt(size)(s)?;
     let (s, b) = decimal_base(s)?;
@@ -73,8 +73,8 @@ pub(crate) fn decimal_number_base_z_number(s: Span) -> IResult<Span, DecimalNumb
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn binary_number(s: Span) -> IResult<Span, BinaryNumber> {
     let (s, a) = opt(size)(s)?;
     let (s, b) = binary_base(s)?;
@@ -82,8 +82,8 @@ pub(crate) fn binary_number(s: Span) -> IResult<Span, BinaryNumber> {
     Ok((s, BinaryNumber { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn octal_number(s: Span) -> IResult<Span, OctalNumber> {
     let (s, a) = opt(size)(s)?;
     let (s, b) = octal_base(s)?;
@@ -91,8 +91,8 @@ pub(crate) fn octal_number(s: Span) -> IResult<Span, OctalNumber> {
     Ok((s, OctalNumber { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn hex_number(s: Span) -> IResult<Span, HexNumber> {
     let (s, a) = opt(size)(s)?;
     let (s, b) = hex_base(s)?;
@@ -100,8 +100,8 @@ pub(crate) fn hex_number(s: Span) -> IResult<Span, HexNumber> {
     Ok((s, HexNumber { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sign(s: Span) -> IResult<Span, Sign> {
     alt((
         map(
@@ -119,21 +119,21 @@ pub(crate) fn sign(s: Span) -> IResult<Span, Sign> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn size(s: Span) -> IResult<Span, Size> {
     let (s, a) = non_zero_unsigned_number(s)?;
     Ok((s, Size { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn non_zero_unsigned_number(s: Span) -> IResult<Span, NonZeroUnsignedNumber> {
     let (s, a) = ws(non_zero_unsigned_number_impl)(s)?;
     Ok((s, NonZeroUnsignedNumber { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn non_zero_unsigned_number_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = is_a("123456789")(s)?;
     let (s, a) = fold_many0(alt((tag("_"), digit1)), a, |acc, item| {
@@ -142,8 +142,8 @@ pub(crate) fn non_zero_unsigned_number_impl(s: Span) -> IResult<Span, Locate> {
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn real_number(s: Span) -> IResult<Span, RealNumber> {
     alt((
         real_number_floating,
@@ -153,8 +153,8 @@ pub(crate) fn real_number(s: Span) -> IResult<Span, RealNumber> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn real_number_floating(s: Span) -> IResult<Span, RealNumber> {
     let (s, a) = unsigned_number_without_ws(s)?;
     let (s, b) = opt(pair(
@@ -174,8 +174,8 @@ pub(crate) fn real_number_floating(s: Span) -> IResult<Span, RealNumber> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn fixed_point_number(s: Span) -> IResult<Span, FixedPointNumber> {
     let (s, a) = unsigned_number_without_ws(s)?;
     let (s, b) = map(tag("."), |x: Span| Symbol {
@@ -185,8 +185,8 @@ pub(crate) fn fixed_point_number(s: Span) -> IResult<Span, FixedPointNumber> {
     Ok((s, FixedPointNumber { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn fixed_point_number_exact(s: Span) -> IResult<Span, FixedPointNumber> {
     let (s, a) = unsigned_number_without_ws(s)?;
     let (s, b) = map(tag("."), |x: Span| Symbol {
@@ -196,8 +196,8 @@ pub(crate) fn fixed_point_number_exact(s: Span) -> IResult<Span, FixedPointNumbe
     Ok((s, FixedPointNumber { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn exp(s: Span) -> IResult<Span, Exp> {
     let (s, a) = alt((
         map(tag("e"), |x: Span| Symbol {
@@ -210,28 +210,28 @@ pub(crate) fn exp(s: Span) -> IResult<Span, Exp> {
     Ok((s, Exp { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn unsigned_number_without_ws(s: Span) -> IResult<Span, UnsignedNumber> {
     let (s, a) = unsigned_number_impl(s)?;
     Ok((s, UnsignedNumber { nodes: (a, vec![]) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn unsigned_number(s: Span) -> IResult<Span, UnsignedNumber> {
     let (s, a) = ws(unsigned_number_impl)(s)?;
     Ok((s, UnsignedNumber { nodes: a }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn unsigned_number_exact(s: Span) -> IResult<Span, UnsignedNumber> {
     let (s, a) = no_ws(unsigned_number_impl)(s)?;
     Ok((s, UnsignedNumber { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn unsigned_number_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = digit1(s)?;
     let (s, a) = fold_many0(alt((tag("_"), digit1)), a, |acc, item| {
@@ -240,14 +240,14 @@ pub(crate) fn unsigned_number_impl(s: Span) -> IResult<Span, Locate> {
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn binary_value(s: Span) -> IResult<Span, BinaryValue> {
     let (s, a) = ws(binary_value_impl)(s)?;
     Ok((s, BinaryValue { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn binary_value_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = is_a("01xXzZ?")(s)?;
     let (s, a) = fold_many0(alt((tag("_"), is_a("01xXzZ?"))), a, |acc, item| {
@@ -256,14 +256,14 @@ pub(crate) fn binary_value_impl(s: Span) -> IResult<Span, Locate> {
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn octal_value(s: Span) -> IResult<Span, OctalValue> {
     let (s, a) = ws(octal_value_impl)(s)?;
     Ok((s, OctalValue { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn octal_value_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = is_a("01234567xXzZ?")(s)?;
     let (s, a) = fold_many0(alt((tag("_"), is_a("01234567xXzZ?"))), a, |acc, item| {
@@ -272,14 +272,14 @@ pub(crate) fn octal_value_impl(s: Span) -> IResult<Span, Locate> {
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn hex_value(s: Span) -> IResult<Span, HexValue> {
     let (s, a) = ws(hex_value_impl)(s)?;
     Ok((s, HexValue { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn hex_value_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = is_a("0123456789abcdefABCDEFxXzZ?")(s)?;
     let (s, a) = fold_many0(
@@ -290,66 +290,66 @@ pub(crate) fn hex_value_impl(s: Span) -> IResult<Span, Locate> {
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn decimal_base(s: Span) -> IResult<Span, DecimalBase> {
     let (s, a) = ws(decimal_base_impl)(s)?;
     Ok((s, DecimalBase { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn decimal_base_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = alt((tag_no_case("'d"), tag_no_case("'sd")))(s)?;
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn binary_base(s: Span) -> IResult<Span, BinaryBase> {
     let (s, a) = ws(binary_base_impl)(s)?;
     Ok((s, BinaryBase { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn binary_base_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = alt((tag_no_case("'b"), tag_no_case("'sb")))(s)?;
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn octal_base(s: Span) -> IResult<Span, OctalBase> {
     let (s, a) = ws(octal_base_impl)(s)?;
     Ok((s, OctalBase { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn octal_base_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = alt((tag_no_case("'o"), tag_no_case("'so")))(s)?;
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn hex_base(s: Span) -> IResult<Span, HexBase> {
     let (s, a) = ws(hex_base_impl)(s)?;
     Ok((s, HexBase { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn hex_base_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = alt((tag_no_case("'h"), tag_no_case("'sh")))(s)?;
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn x_number(s: Span) -> IResult<Span, XNumber> {
     let (s, a) = ws(x_number_impl)(s)?;
     Ok((s, XNumber { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn x_number_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = tag_no_case("x")(s)?;
     let (s, a) = fold_many0(alt((tag("_"), is_a("_"))), a, |acc, item| {
@@ -358,14 +358,14 @@ pub(crate) fn x_number_impl(s: Span) -> IResult<Span, Locate> {
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn z_number(s: Span) -> IResult<Span, ZNumber> {
     let (s, a) = ws(z_number_impl)(s)?;
     Ok((s, ZNumber { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn z_number_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = alt((tag_no_case("z"), tag("?")))(s)?;
     let (s, a) = fold_many0(alt((tag("_"), is_a("_"))), a, |acc, item| {
@@ -374,8 +374,8 @@ pub(crate) fn z_number_impl(s: Span) -> IResult<Span, Locate> {
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn unbased_unsized_literal(s: Span) -> IResult<Span, UnbasedUnsizedLiteral> {
     let (s, a) = alt((
         symbol("'0"),

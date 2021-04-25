@@ -2,16 +2,16 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn generate_region(s: Span) -> IResult<Span, GenerateRegion> {
     let (s, a) = keyword("generate")(s)?;
     let (s, (b, c)) = many_till(generate_item, keyword("endgenerate"))(s)?;
     Ok((s, GenerateRegion { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn loop_generate_construct(s: Span) -> IResult<Span, LoopGenerateConstruct> {
     let (s, a) = keyword("for")(s)?;
     let (s, b) = paren(tuple((
@@ -25,8 +25,8 @@ pub(crate) fn loop_generate_construct(s: Span) -> IResult<Span, LoopGenerateCons
     Ok((s, LoopGenerateConstruct { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn generate_initialization(s: Span) -> IResult<Span, GenvarInitialization> {
     let (s, a) = opt(map(keyword("genvar"), |x| Genvar { nodes: (x,) }))(s)?;
     let (s, b) = genvar_identifier(s)?;
@@ -40,8 +40,8 @@ pub(crate) fn generate_initialization(s: Span) -> IResult<Span, GenvarInitializa
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn genvar_iteration(s: Span) -> IResult<Span, GenvarIteration> {
     alt((
         genvar_iteration_assignment,
@@ -50,8 +50,8 @@ pub(crate) fn genvar_iteration(s: Span) -> IResult<Span, GenvarIteration> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn genvar_iteration_assignment(s: Span) -> IResult<Span, GenvarIteration> {
     let (s, a) = genvar_identifier(s)?;
     let (s, b) = assignment_operator(s)?;
@@ -62,8 +62,8 @@ pub(crate) fn genvar_iteration_assignment(s: Span) -> IResult<Span, GenvarIterat
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn genvar_iteration_prefix(s: Span) -> IResult<Span, GenvarIteration> {
     let (s, a) = inc_or_dec_operator(s)?;
     let (s, b) = genvar_identifier(s)?;
@@ -73,8 +73,8 @@ pub(crate) fn genvar_iteration_prefix(s: Span) -> IResult<Span, GenvarIteration>
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn genvar_iteration_suffix(s: Span) -> IResult<Span, GenvarIteration> {
     let (s, a) = genvar_identifier(s)?;
     let (s, b) = inc_or_dec_operator(s)?;
@@ -84,8 +84,8 @@ pub(crate) fn genvar_iteration_suffix(s: Span) -> IResult<Span, GenvarIteration>
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn conditional_generate_construct(
     s: Span,
 ) -> IResult<Span, ConditionalGenerateConstruct> {
@@ -99,8 +99,8 @@ pub(crate) fn conditional_generate_construct(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn if_generate_construct(s: Span) -> IResult<Span, IfGenerateConstruct> {
     let (s, a) = keyword("if")(s)?;
     let (s, b) = paren(constant_expression)(s)?;
@@ -114,8 +114,8 @@ pub(crate) fn if_generate_construct(s: Span) -> IResult<Span, IfGenerateConstruc
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn case_generate_construct(s: Span) -> IResult<Span, CaseGenerateConstruct> {
     let (s, a) = keyword("case")(s)?;
     let (s, b) = paren(constant_expression)(s)?;
@@ -129,15 +129,15 @@ pub(crate) fn case_generate_construct(s: Span) -> IResult<Span, CaseGenerateCons
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn case_generate_item(s: Span) -> IResult<Span, CaseGenerateItem> {
     alt((case_generate_item_nondefault, case_generate_item_default))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn case_generate_item_nondefault(s: Span) -> IResult<Span, CaseGenerateItem> {
     let (s, a) = list(symbol(","), constant_expression)(s)?;
     let (s, b) = symbol(":")(s)?;
@@ -148,8 +148,8 @@ pub(crate) fn case_generate_item_nondefault(s: Span) -> IResult<Span, CaseGenera
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn case_generate_item_default(s: Span) -> IResult<Span, CaseGenerateItem> {
     let (s, a) = keyword("default")(s)?;
     let (s, b) = opt(symbol(":"))(s)?;
@@ -160,8 +160,8 @@ pub(crate) fn case_generate_item_default(s: Span) -> IResult<Span, CaseGenerateI
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn generate_block(s: Span) -> IResult<Span, GenerateBlock> {
     alt((
         map(generate_item, |x| GenerateBlock::GenerateItem(Box::new(x))),
@@ -169,8 +169,8 @@ pub(crate) fn generate_block(s: Span) -> IResult<Span, GenerateBlock> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn generate_block_multiple(s: Span) -> IResult<Span, GenerateBlock> {
     let (s, a) = opt(pair(generate_block_identifier, symbol(":")))(s)?;
     let (s, b) = keyword("begin")(s)?;
@@ -185,8 +185,8 @@ pub(crate) fn generate_block_multiple(s: Span) -> IResult<Span, GenerateBlock> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn generate_item(s: Span) -> IResult<Span, GenerateItem> {
     alt((
         map(module_or_generate_item, |x| {

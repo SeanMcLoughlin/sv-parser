@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn let_declaration(s: Span) -> IResult<Span, LetDeclaration> {
     let (s, a) = keyword("let")(s)?;
     let (s, b) = let_identifier(s)?;
@@ -19,22 +19,22 @@ pub(crate) fn let_declaration(s: Span) -> IResult<Span, LetDeclaration> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn let_identifier(s: Span) -> IResult<Span, LetIdentifier> {
     let (s, a) = identifier(s)?;
     Ok((s, LetIdentifier { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn let_port_list(s: Span) -> IResult<Span, LetPortList> {
     let (s, a) = list(symbol(","), let_port_item)(s)?;
     Ok((s, LetPortList { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn let_port_item(s: Span) -> IResult<Span, LetPortItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = let_formal_type(s)?;
@@ -49,8 +49,8 @@ pub(crate) fn let_port_item(s: Span) -> IResult<Span, LetPortItem> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn let_formal_type(s: Span) -> IResult<Span, LetFormalType> {
     alt((
         map(data_type_or_implicit_let_formal_type, |x| {
@@ -60,8 +60,8 @@ pub(crate) fn let_formal_type(s: Span) -> IResult<Span, LetFormalType> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn data_type_or_implicit_let_formal_type(s: Span) -> IResult<Span, DataTypeOrImplicit> {
     alt((
         map(terminated(data_type, peek(formal_port_identifier)), |x| {
@@ -74,8 +74,8 @@ pub(crate) fn data_type_or_implicit_let_formal_type(s: Span) -> IResult<Span, Da
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn let_expression(s: Span) -> IResult<Span, LetExpression> {
     let (s, a) = opt(package_scope)(s)?;
     let (s, b) = let_identifier(s)?;
@@ -83,15 +83,15 @@ pub(crate) fn let_expression(s: Span) -> IResult<Span, LetExpression> {
     Ok((s, LetExpression { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn let_list_of_arguments(s: Span) -> IResult<Span, LetListOfArguments> {
     alt((let_list_of_arguments_named, let_list_of_arguments_ordered))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn let_list_of_arguments_ordered(s: Span) -> IResult<Span, LetListOfArguments> {
     let (s, a) = list(symbol(","), opt(let_actual_arg))(s)?;
     let (s, b) = many0(tuple((
@@ -106,8 +106,8 @@ pub(crate) fn let_list_of_arguments_ordered(s: Span) -> IResult<Span, LetListOfA
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn let_list_of_arguments_named(s: Span) -> IResult<Span, LetListOfArguments> {
     let (s, a) = list(
         symbol(","),
@@ -119,8 +119,8 @@ pub(crate) fn let_list_of_arguments_named(s: Span) -> IResult<Span, LetListOfArg
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn let_actual_arg(s: Span) -> IResult<Span, LetActualArg> {
     let (s, a) = expression(s)?;
     Ok((s, LetActualArg { nodes: (a,) }))

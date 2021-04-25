@@ -2,16 +2,16 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn specify_block(s: Span) -> IResult<Span, SpecifyBlock> {
     let (s, a) = keyword("specify")(s)?;
     let (s, (b, c)) = many_till(specify_item, keyword("endspecify"))(s)?;
     Ok((s, SpecifyBlock { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn specify_item(s: Span) -> IResult<Span, SpecifyItem> {
     alt((
         map(specparam_declaration, |x| {
@@ -32,8 +32,8 @@ pub(crate) fn specify_item(s: Span) -> IResult<Span, SpecifyItem> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn pulsestyle_declaration(s: Span) -> IResult<Span, PulsestyleDeclaration> {
     let (s, a) = alt((
         keyword("pulsestyle_onevent"),
@@ -44,8 +44,8 @@ pub(crate) fn pulsestyle_declaration(s: Span) -> IResult<Span, PulsestyleDeclara
     Ok((s, PulsestyleDeclaration { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn showcancelled_declaration(s: Span) -> IResult<Span, ShowcancelledDeclaration> {
     let (s, a) = alt((keyword("showcancelled"), keyword("noshowcancelled")))(s)?;
     let (s, b) = list_of_path_outputs(s)?;

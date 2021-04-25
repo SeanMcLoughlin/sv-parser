@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn program_item(s: Span) -> IResult<Span, ProgramItem> {
     alt((
         map(pair(port_declaration, symbol(";")), |x| {
@@ -15,8 +15,8 @@ pub(crate) fn program_item(s: Span) -> IResult<Span, ProgramItem> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn non_port_program_item(s: Span) -> IResult<Span, NonPortProgramItem> {
     alt((
         non_port_program_item_assign,
@@ -33,8 +33,8 @@ pub(crate) fn non_port_program_item(s: Span) -> IResult<Span, NonPortProgramItem
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn non_port_program_item_assign(s: Span) -> IResult<Span, NonPortProgramItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = continuous_assign(s)?;
@@ -44,9 +44,9 @@ pub(crate) fn non_port_program_item_assign(s: Span) -> IResult<Span, NonPortProg
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn non_port_program_item_module(s: Span) -> IResult<Span, NonPortProgramItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = module_or_generate_item_declaration(s)?;
@@ -56,8 +56,8 @@ pub(crate) fn non_port_program_item_module(s: Span) -> IResult<Span, NonPortProg
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn non_port_program_item_initial(s: Span) -> IResult<Span, NonPortProgramItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = initial_construct(s)?;
@@ -67,8 +67,8 @@ pub(crate) fn non_port_program_item_initial(s: Span) -> IResult<Span, NonPortPro
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn non_port_program_item_final(s: Span) -> IResult<Span, NonPortProgramItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = final_construct(s)?;
@@ -78,8 +78,8 @@ pub(crate) fn non_port_program_item_final(s: Span) -> IResult<Span, NonPortProgr
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn non_port_program_item_assertion(s: Span) -> IResult<Span, NonPortProgramItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = concurrent_assertion_item(s)?;
@@ -89,8 +89,8 @@ pub(crate) fn non_port_program_item_assertion(s: Span) -> IResult<Span, NonPortP
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn program_generate_item(s: Span) -> IResult<Span, ProgramGenerateItem> {
     alt((
         map(loop_generate_construct, |x| {

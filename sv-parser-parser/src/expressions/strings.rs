@@ -2,14 +2,14 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn string_literal(s: Span) -> IResult<Span, StringLiteral> {
     let (s, a) = ws(string_literal_impl)(s)?;
     Ok((s, StringLiteral { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn string_literal_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = tag("\"")(s)?;
     let (s, b) = many0(alt((

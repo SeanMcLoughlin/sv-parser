@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn procedural_timing_control_statement(
     s: Span,
 ) -> IResult<Span, ProceduralTimingControlStatement> {
@@ -12,8 +12,8 @@ pub(crate) fn procedural_timing_control_statement(
     Ok((s, ProceduralTimingControlStatement { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay_or_event_control(s: Span) -> IResult<Span, DelayOrEventControl> {
     alt((
         map(delay_control, |x| DelayOrEventControl::Delay(Box::new(x))),
@@ -22,8 +22,8 @@ pub(crate) fn delay_or_event_control(s: Span) -> IResult<Span, DelayOrEventContr
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay_or_event_control_repeat(s: Span) -> IResult<Span, DelayOrEventControl> {
     let (s, a) = keyword("repeat")(s)?;
     let (s, b) = paren(expression)(s)?;
@@ -34,14 +34,14 @@ pub(crate) fn delay_or_event_control_repeat(s: Span) -> IResult<Span, DelayOrEve
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay_control(s: Span) -> IResult<Span, DelayControl> {
     alt((delay_control_delay, delay_control_mintypmax))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay_control_delay(s: Span) -> IResult<Span, DelayControl> {
     let (s, a) = symbol("#")(s)?;
     let (s, b) = delay_value(s)?;
@@ -51,8 +51,8 @@ pub(crate) fn delay_control_delay(s: Span) -> IResult<Span, DelayControl> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay_control_mintypmax(s: Span) -> IResult<Span, DelayControl> {
     let (s, a) = symbol("#")(s)?;
     let (s, b) = paren(mintypmax_expression)(s)?;
@@ -62,8 +62,8 @@ pub(crate) fn delay_control_mintypmax(s: Span) -> IResult<Span, DelayControl> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_control(s: Span) -> IResult<Span, EventControl> {
     alt((
         event_control_event_identifier,
@@ -74,8 +74,8 @@ pub(crate) fn event_control(s: Span) -> IResult<Span, EventControl> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_control_event_identifier(s: Span) -> IResult<Span, EventControl> {
     let (s, a) = symbol("@")(s)?;
     let (s, b) = hierarchical_event_identifier(s)?;
@@ -85,8 +85,8 @@ pub(crate) fn event_control_event_identifier(s: Span) -> IResult<Span, EventCont
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_control_event_expression(s: Span) -> IResult<Span, EventControl> {
     let (s, a) = symbol("@")(s)?;
     let (s, b) = paren(event_expression)(s)?;
@@ -96,8 +96,8 @@ pub(crate) fn event_control_event_expression(s: Span) -> IResult<Span, EventCont
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_control_asterisk(s: Span) -> IResult<Span, EventControl> {
     let (s, a) = symbol("@*")(s)?;
     Ok((
@@ -106,8 +106,8 @@ pub(crate) fn event_control_asterisk(s: Span) -> IResult<Span, EventControl> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_control_paren_asterisk(s: Span) -> IResult<Span, EventControl> {
     let (s, a) = symbol("@")(s)?;
     let (s, b) = paren(symbol("*"))(s)?;
@@ -117,8 +117,8 @@ pub(crate) fn event_control_paren_asterisk(s: Span) -> IResult<Span, EventContro
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_control_sequence_identifier(s: Span) -> IResult<Span, EventControl> {
     let (s, a) = symbol("@")(s)?;
     let (s, b) = ps_or_hierarchical_sequence_identifier(s)?;
@@ -130,8 +130,8 @@ pub(crate) fn event_control_sequence_identifier(s: Span) -> IResult<Span, EventC
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_expression(s: Span) -> IResult<Span, EventExpression> {
     alt((
         event_expression_or,
@@ -142,9 +142,9 @@ pub(crate) fn event_expression(s: Span) -> IResult<Span, EventExpression> {
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_expression_expression(s: Span) -> IResult<Span, EventExpression> {
     let (s, a) = opt(edge_identifier)(s)?;
     let (s, b) = expression(s)?;
@@ -155,8 +155,8 @@ pub(crate) fn event_expression_expression(s: Span) -> IResult<Span, EventExpress
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_expression_sequence(s: Span) -> IResult<Span, EventExpression> {
     let (s, a) = sequence_instance(s)?;
     let (s, b) = opt(pair(keyword("iff"), expression))(s)?;
@@ -166,9 +166,9 @@ pub(crate) fn event_expression_sequence(s: Span) -> IResult<Span, EventExpressio
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_expression_or(s: Span) -> IResult<Span, EventExpression> {
     let (s, a) = event_expression(s)?;
     let (s, b) = keyword("or")(s)?;
@@ -179,9 +179,9 @@ pub(crate) fn event_expression_or(s: Span) -> IResult<Span, EventExpression> {
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_expression_comma(s: Span) -> IResult<Span, EventExpression> {
     let (s, a) = event_expression(s)?;
     let (s, b) = symbol(",")(s)?;
@@ -192,8 +192,8 @@ pub(crate) fn event_expression_comma(s: Span) -> IResult<Span, EventExpression> 
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_expression_paren(s: Span) -> IResult<Span, EventExpression> {
     let (s, a) = paren(event_expression)(s)?;
     Ok((
@@ -202,8 +202,8 @@ pub(crate) fn event_expression_paren(s: Span) -> IResult<Span, EventExpression> 
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn procedural_timing_control(s: Span) -> IResult<Span, ProceduralTimingControl> {
     alt((
         map(delay_control, |x| {
@@ -218,8 +218,8 @@ pub(crate) fn procedural_timing_control(s: Span) -> IResult<Span, ProceduralTimi
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn jump_statement(s: Span) -> IResult<Span, JumpStatement> {
     alt((
         jump_statement_return,
@@ -228,8 +228,8 @@ pub(crate) fn jump_statement(s: Span) -> IResult<Span, JumpStatement> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn jump_statement_return(s: Span) -> IResult<Span, JumpStatement> {
     let (s, a) = keyword("return")(s)?;
     let (s, b) = opt(expression)(s)?;
@@ -240,8 +240,8 @@ pub(crate) fn jump_statement_return(s: Span) -> IResult<Span, JumpStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn jump_statement_break(s: Span) -> IResult<Span, JumpStatement> {
     let (s, a) = keyword("break")(s)?;
     let (s, b) = symbol(";")(s)?;
@@ -251,8 +251,8 @@ pub(crate) fn jump_statement_break(s: Span) -> IResult<Span, JumpStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn jump_statement_continue(s: Span) -> IResult<Span, JumpStatement> {
     let (s, a) = keyword("continue")(s)?;
     let (s, b) = symbol(";")(s)?;
@@ -262,8 +262,8 @@ pub(crate) fn jump_statement_continue(s: Span) -> IResult<Span, JumpStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn wait_statement(s: Span) -> IResult<Span, WaitStatement> {
     alt((
         wait_statement_wait,
@@ -272,8 +272,8 @@ pub(crate) fn wait_statement(s: Span) -> IResult<Span, WaitStatement> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn wait_statement_wait(s: Span) -> IResult<Span, WaitStatement> {
     let (s, a) = keyword("wait")(s)?;
     let (s, b) = paren(expression)(s)?;
@@ -284,8 +284,8 @@ pub(crate) fn wait_statement_wait(s: Span) -> IResult<Span, WaitStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn wait_statement_fork(s: Span) -> IResult<Span, WaitStatement> {
     let (s, a) = keyword("wait")(s)?;
     let (s, b) = keyword("fork")(s)?;
@@ -296,8 +296,8 @@ pub(crate) fn wait_statement_fork(s: Span) -> IResult<Span, WaitStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn wait_statement_order(s: Span) -> IResult<Span, WaitStatement> {
     let (s, a) = keyword("wait_order")(s)?;
     let (s, b) = paren(list(symbol(","), hierarchical_identifier))(s)?;
@@ -308,14 +308,14 @@ pub(crate) fn wait_statement_order(s: Span) -> IResult<Span, WaitStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_trigger(s: Span) -> IResult<Span, EventTrigger> {
     alt((event_trigger_named, event_trigger_nonblocking))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_trigger_named(s: Span) -> IResult<Span, EventTrigger> {
     let (s, a) = symbol("->")(s)?;
     let (s, b) = hierarchical_event_identifier(s)?;
@@ -326,8 +326,8 @@ pub(crate) fn event_trigger_named(s: Span) -> IResult<Span, EventTrigger> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_trigger_nonblocking(s: Span) -> IResult<Span, EventTrigger> {
     let (s, a) = symbol("->>")(s)?;
     let (s, b) = opt(delay_or_event_control)(s)?;
@@ -341,8 +341,8 @@ pub(crate) fn event_trigger_nonblocking(s: Span) -> IResult<Span, EventTrigger> 
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn disable_statement(s: Span) -> IResult<Span, DisableStatement> {
     alt((
         disable_statement_task,
@@ -351,8 +351,8 @@ pub(crate) fn disable_statement(s: Span) -> IResult<Span, DisableStatement> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn disable_statement_task(s: Span) -> IResult<Span, DisableStatement> {
     let (s, a) = keyword("disable")(s)?;
     let (s, b) = hierarchical_task_identifier(s)?;
@@ -363,8 +363,8 @@ pub(crate) fn disable_statement_task(s: Span) -> IResult<Span, DisableStatement>
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn disable_statement_block(s: Span) -> IResult<Span, DisableStatement> {
     let (s, a) = keyword("disable")(s)?;
     let (s, b) = hierarchical_block_identifier(s)?;
@@ -375,8 +375,8 @@ pub(crate) fn disable_statement_block(s: Span) -> IResult<Span, DisableStatement
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn disable_statement_fork(s: Span) -> IResult<Span, DisableStatement> {
     let (s, a) = keyword("disable")(s)?;
     let (s, b) = keyword("fork")(s)?;

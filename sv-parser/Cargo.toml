@@ -21,6 +21,8 @@ pre-release-replacements = [
 [features]
 default = []
 trace   = ["sv-parser-parser/trace"]
+packrat = ["sv-parser-parser/packrat"]
+recursive = ["sv-parser-parser/recursive"]
 
 [dependencies]
 nom                  = "6"

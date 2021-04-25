@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn loop_statement(s: Span) -> IResult<Span, LoopStatement> {
     alt((
         loop_statement_forever,
@@ -15,8 +15,8 @@ pub(crate) fn loop_statement(s: Span) -> IResult<Span, LoopStatement> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn loop_statement_forever(s: Span) -> IResult<Span, LoopStatement> {
     let (s, a) = keyword("forever")(s)?;
     let (s, b) = statement_or_null(s)?;
@@ -26,8 +26,8 @@ pub(crate) fn loop_statement_forever(s: Span) -> IResult<Span, LoopStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn loop_statement_repeat(s: Span) -> IResult<Span, LoopStatement> {
     let (s, a) = keyword("repeat")(s)?;
     let (s, b) = paren(expression)(s)?;
@@ -38,8 +38,8 @@ pub(crate) fn loop_statement_repeat(s: Span) -> IResult<Span, LoopStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn loop_statement_while(s: Span) -> IResult<Span, LoopStatement> {
     let (s, a) = keyword("while")(s)?;
     let (s, b) = paren(expression)(s)?;
@@ -50,8 +50,8 @@ pub(crate) fn loop_statement_while(s: Span) -> IResult<Span, LoopStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn loop_statement_for(s: Span) -> IResult<Span, LoopStatement> {
     let (s, a) = keyword("for")(s)?;
     let (s, b) = paren(tuple((
@@ -68,8 +68,8 @@ pub(crate) fn loop_statement_for(s: Span) -> IResult<Span, LoopStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn loop_statement_do_while(s: Span) -> IResult<Span, LoopStatement> {
     let (s, a) = keyword("do")(s)?;
     let (s, b) = statement_or_null(s)?;
@@ -84,8 +84,8 @@ pub(crate) fn loop_statement_do_while(s: Span) -> IResult<Span, LoopStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn loop_statement_foreach(s: Span) -> IResult<Span, LoopStatement> {
     let (s, a) = keyword("foreach")(s)?;
     let (s, b) = paren(pair(
@@ -99,8 +99,8 @@ pub(crate) fn loop_statement_foreach(s: Span) -> IResult<Span, LoopStatement> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn for_initialization(s: Span) -> IResult<Span, ForInitialization> {
     alt((
         map(list_of_variable_assignments, |x| {
@@ -110,9 +110,9 @@ pub(crate) fn for_initialization(s: Span) -> IResult<Span, ForInitialization> {
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn for_initialization_declaration(s: Span) -> IResult<Span, ForInitialization> {
     let (s, a) = list(symbol(","), for_variable_declaration)(s)?;
     Ok((
@@ -121,8 +121,8 @@ pub(crate) fn for_initialization_declaration(s: Span) -> IResult<Span, ForInitia
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn for_variable_declaration(s: Span) -> IResult<Span, ForVariableDeclaration> {
     let (s, a) = opt(var)(s)?;
     let (s, b) = data_type(s)?;
@@ -133,23 +133,23 @@ pub(crate) fn for_variable_declaration(s: Span) -> IResult<Span, ForVariableDecl
     Ok((s, ForVariableDeclaration { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn var(s: Span) -> IResult<Span, Var> {
     let (s, a) = keyword("var")(s)?;
     Ok((s, Var { nodes: (a,) }))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn for_step(s: Span) -> IResult<Span, ForStep> {
     let (s, a) = list(symbol(","), for_step_assignment)(s)?;
     Ok((s, ForStep { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn for_step_assignment(s: Span) -> IResult<Span, ForStepAssignment> {
     alt((
         map(operator_assignment, |x| {
@@ -164,8 +164,8 @@ pub(crate) fn for_step_assignment(s: Span) -> IResult<Span, ForStepAssignment> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn loop_variables(s: Span) -> IResult<Span, LoopVariables> {
     let (s, a) = list(symbol(","), opt(index_variable_identifier))(s)?;
     Ok((s, LoopVariables { nodes: (a,) }))

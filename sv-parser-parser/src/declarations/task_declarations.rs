@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn task_declaration(s: Span) -> IResult<Span, TaskDeclaration> {
     let (s, a) = keyword("task")(s)?;
     let (s, b) = opt(lifetime)(s)?;
@@ -11,8 +11,8 @@ pub(crate) fn task_declaration(s: Span) -> IResult<Span, TaskDeclaration> {
     Ok((s, TaskDeclaration { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn task_body_declaration(s: Span) -> IResult<Span, TaskBodyDeclaration> {
     alt((
         task_body_declaration_without_port,
@@ -20,8 +20,8 @@ pub(crate) fn task_body_declaration(s: Span) -> IResult<Span, TaskBodyDeclaratio
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn task_body_declaration_without_port(s: Span) -> IResult<Span, TaskBodyDeclaration> {
     let (s, a) = opt(interface_identifier_or_class_scope)(s)?;
     let (s, b) = task_identifier(s)?;
@@ -37,8 +37,8 @@ pub(crate) fn task_body_declaration_without_port(s: Span) -> IResult<Span, TaskB
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn task_body_declaration_with_port(s: Span) -> IResult<Span, TaskBodyDeclaration> {
     let (s, a) = opt(interface_identifier_or_class_scope)(s)?;
     let (s, b) = task_identifier(s)?;
@@ -55,8 +55,8 @@ pub(crate) fn task_body_declaration_with_port(s: Span) -> IResult<Span, TaskBody
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn tf_item_declaration(s: Span) -> IResult<Span, TfItemDeclaration> {
     alt((
         map(block_item_declaration, |x| {
@@ -68,15 +68,15 @@ pub(crate) fn tf_item_declaration(s: Span) -> IResult<Span, TfItemDeclaration> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn tf_port_list(s: Span) -> IResult<Span, TfPortList> {
     let (s, a) = list(symbol(","), tf_port_item)(s)?;
     Ok((s, TfPortList { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn tf_port_item(s: Span) -> IResult<Span, TfPortItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = opt(tf_port_direction)(s)?;
@@ -95,8 +95,8 @@ pub(crate) fn tf_port_item(s: Span) -> IResult<Span, TfPortItem> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn data_type_or_implicit_tf_port_item(s: Span) -> IResult<Span, DataTypeOrImplicit> {
     alt((
         map(
@@ -130,8 +130,8 @@ pub(crate) fn data_type_or_implicit_tf_port_item(s: Span) -> IResult<Span, DataT
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn tf_port_direction(s: Span) -> IResult<Span, TfPortDirection> {
     alt((
         map(port_direction, |x| {
@@ -143,8 +143,8 @@ pub(crate) fn tf_port_direction(s: Span) -> IResult<Span, TfPortDirection> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn tf_port_declaration(s: Span) -> IResult<Span, TfPortDeclaration> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = tf_port_direction(s)?;
@@ -160,8 +160,8 @@ pub(crate) fn tf_port_declaration(s: Span) -> IResult<Span, TfPortDeclaration> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn data_type_or_implicit_tf_port_declaration(
     s: Span,
 ) -> IResult<Span, DataTypeOrImplicit> {
@@ -176,8 +176,8 @@ pub(crate) fn data_type_or_implicit_tf_port_declaration(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn task_prototype(s: Span) -> IResult<Span, TaskPrototype> {
     let (s, a) = keyword("task")(s)?;
     let (s, b) = task_identifier(s)?;

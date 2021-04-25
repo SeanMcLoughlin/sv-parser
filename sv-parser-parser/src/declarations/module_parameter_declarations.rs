@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn local_parameter_declaration(s: Span) -> IResult<Span, LocalParameterDeclaration> {
     alt((
         local_parameter_declaration_param,
@@ -11,8 +11,8 @@ pub(crate) fn local_parameter_declaration(s: Span) -> IResult<Span, LocalParamet
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn local_parameter_declaration_param(
     s: Span,
 ) -> IResult<Span, LocalParameterDeclaration> {
@@ -27,8 +27,8 @@ pub(crate) fn local_parameter_declaration_param(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn data_type_or_implicit_local_parameter_declaration_param(
     s: Span,
 ) -> IResult<Span, DataTypeOrImplicit> {
@@ -43,8 +43,8 @@ pub(crate) fn data_type_or_implicit_local_parameter_declaration_param(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn local_parameter_declaration_type(
     s: Span,
 ) -> IResult<Span, LocalParameterDeclaration> {
@@ -59,14 +59,14 @@ pub(crate) fn local_parameter_declaration_type(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn parameter_declaration(s: Span) -> IResult<Span, ParameterDeclaration> {
     alt((parameter_declaration_param, parameter_declaration_type))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn parameter_declaration_param(s: Span) -> IResult<Span, ParameterDeclaration> {
     let (s, a) = keyword("parameter")(s)?;
     let (s, b) = data_type_or_implicit_parameter_declaration_param(s)?;
@@ -77,8 +77,8 @@ pub(crate) fn parameter_declaration_param(s: Span) -> IResult<Span, ParameterDec
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn data_type_or_implicit_parameter_declaration_param(
     s: Span,
 ) -> IResult<Span, DataTypeOrImplicit> {
@@ -93,8 +93,8 @@ pub(crate) fn data_type_or_implicit_parameter_declaration_param(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn parameter_declaration_type(s: Span) -> IResult<Span, ParameterDeclaration> {
     let (s, a) = keyword("parameter")(s)?;
     let (s, b) = keyword("type")(s)?;
@@ -105,8 +105,8 @@ pub(crate) fn parameter_declaration_type(s: Span) -> IResult<Span, ParameterDecl
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn specparam_declaration(s: Span) -> IResult<Span, SpecparamDeclaration> {
     let (s, a) = keyword("specparam")(s)?;
     let (s, b) = opt(packed_dimension)(s)?;

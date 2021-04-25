@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn block_item_declaration(s: Span) -> IResult<Span, BlockItemDeclaration> {
     alt((
         block_item_declaration_data,
@@ -13,9 +13,9 @@ pub(crate) fn block_item_declaration(s: Span) -> IResult<Span, BlockItemDeclarat
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn block_item_declaration_data(s: Span) -> IResult<Span, BlockItemDeclaration> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = data_declaration(s)?;
@@ -25,8 +25,8 @@ pub(crate) fn block_item_declaration_data(s: Span) -> IResult<Span, BlockItemDec
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn block_item_declaration_local_parameter(
     s: Span,
 ) -> IResult<Span, BlockItemDeclaration> {
@@ -41,8 +41,8 @@ pub(crate) fn block_item_declaration_local_parameter(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn block_item_declaration_parameter(s: Span) -> IResult<Span, BlockItemDeclaration> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = parameter_declaration(s)?;
@@ -55,8 +55,8 @@ pub(crate) fn block_item_declaration_parameter(s: Span) -> IResult<Span, BlockIt
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn block_item_declaration_let(s: Span) -> IResult<Span, BlockItemDeclaration> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = let_declaration(s)?;

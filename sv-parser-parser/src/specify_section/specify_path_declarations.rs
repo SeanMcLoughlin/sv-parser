@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn path_declaration(s: Span) -> IResult<Span, PathDeclaration> {
     alt((
         map(pair(simple_path_declaration, symbol(";")), |x| {
@@ -18,8 +18,8 @@ pub(crate) fn path_declaration(s: Span) -> IResult<Span, PathDeclaration> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn simple_path_declaration(s: Span) -> IResult<Span, SimplePathDeclaration> {
     alt((
         simple_path_declaration_parallel,
@@ -27,8 +27,8 @@ pub(crate) fn simple_path_declaration(s: Span) -> IResult<Span, SimplePathDeclar
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn simple_path_declaration_parallel(s: Span) -> IResult<Span, SimplePathDeclaration> {
     let (s, a) = parallel_path_description(s)?;
     let (s, b) = symbol("=")(s)?;
@@ -41,8 +41,8 @@ pub(crate) fn simple_path_declaration_parallel(s: Span) -> IResult<Span, SimpleP
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn simple_path_declaration_full(s: Span) -> IResult<Span, SimplePathDeclaration> {
     let (s, a) = full_path_description(s)?;
     let (s, b) = symbol("=")(s)?;
@@ -53,8 +53,8 @@ pub(crate) fn simple_path_declaration_full(s: Span) -> IResult<Span, SimplePathD
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn parallel_path_description(s: Span) -> IResult<Span, ParallelPathDescription> {
     let (s, a) = paren(tuple((
         specify_input_terminal_descriptor,
@@ -65,8 +65,8 @@ pub(crate) fn parallel_path_description(s: Span) -> IResult<Span, ParallelPathDe
     Ok((s, ParallelPathDescription { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn full_path_description(s: Span) -> IResult<Span, FullPathDescription> {
     let (s, a) = paren(tuple((
         list_of_path_inputs,
@@ -77,15 +77,15 @@ pub(crate) fn full_path_description(s: Span) -> IResult<Span, FullPathDescriptio
     Ok((s, FullPathDescription { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn list_of_path_inputs(s: Span) -> IResult<Span, ListOfPathInputs> {
     let (s, a) = list(symbol(","), specify_input_terminal_descriptor)(s)?;
     Ok((s, ListOfPathInputs { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn list_of_path_outputs(s: Span) -> IResult<Span, ListOfPathOutputs> {
     let (s, a) = list(symbol(","), specify_output_terminal_descriptor)(s)?;
     Ok((s, ListOfPathOutputs { nodes: (a,) }))

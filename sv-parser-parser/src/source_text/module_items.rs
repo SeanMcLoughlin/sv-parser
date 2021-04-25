@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn elaboration_system_task(s: Span) -> IResult<Span, ElaborationSystemTask> {
     alt((
         elaboration_system_task_fatal,
@@ -13,8 +13,8 @@ pub(crate) fn elaboration_system_task(s: Span) -> IResult<Span, ElaborationSyste
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn elaboration_system_task_fatal(s: Span) -> IResult<Span, ElaborationSystemTask> {
     let (s, a) = keyword("$fatal")(s)?;
     let (s, b) = opt(paren(pair(
@@ -28,8 +28,8 @@ pub(crate) fn elaboration_system_task_fatal(s: Span) -> IResult<Span, Elaboratio
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn elaboration_system_task_error(s: Span) -> IResult<Span, ElaborationSystemTask> {
     let (s, a) = keyword("$error")(s)?;
     let (s, b) = opt(paren(opt(list_of_arguments)))(s)?;
@@ -40,8 +40,8 @@ pub(crate) fn elaboration_system_task_error(s: Span) -> IResult<Span, Elaboratio
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn elaboration_system_task_warning(s: Span) -> IResult<Span, ElaborationSystemTask> {
     let (s, a) = keyword("$warning")(s)?;
     let (s, b) = opt(paren(opt(list_of_arguments)))(s)?;
@@ -54,8 +54,8 @@ pub(crate) fn elaboration_system_task_warning(s: Span) -> IResult<Span, Elaborat
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn elaboration_system_task_info(s: Span) -> IResult<Span, ElaborationSystemTask> {
     let (s, a) = keyword("$info")(s)?;
     let (s, b) = opt(paren(opt(list_of_arguments)))(s)?;
@@ -66,8 +66,8 @@ pub(crate) fn elaboration_system_task_info(s: Span) -> IResult<Span, Elaboration
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn finish_number(s: Span) -> IResult<Span, FinishNumber> {
     alt((
         map(symbol("0"), |x| FinishNumber::Zero(Box::new(x))),
@@ -76,8 +76,8 @@ pub(crate) fn finish_number(s: Span) -> IResult<Span, FinishNumber> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_common_item(s: Span) -> IResult<Span, ModuleCommonItem> {
     alt((
         map(module_or_generate_item_declaration, |x| {
@@ -120,8 +120,8 @@ pub(crate) fn module_common_item(s: Span) -> IResult<Span, ModuleCommonItem> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_item(s: Span) -> IResult<Span, ModuleItem> {
     alt((
         map(pair(port_declaration, symbol(";")), |x| {
@@ -133,8 +133,8 @@ pub(crate) fn module_item(s: Span) -> IResult<Span, ModuleItem> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_or_generate_item(s: Span) -> IResult<Span, ModuleOrGenerateItem> {
     alt((
         module_or_generate_item_parameter,
@@ -145,8 +145,8 @@ pub(crate) fn module_or_generate_item(s: Span) -> IResult<Span, ModuleOrGenerate
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_or_generate_item_parameter(s: Span) -> IResult<Span, ModuleOrGenerateItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = parameter_override(s)?;
@@ -156,8 +156,8 @@ pub(crate) fn module_or_generate_item_parameter(s: Span) -> IResult<Span, Module
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_or_generate_item_gate(s: Span) -> IResult<Span, ModuleOrGenerateItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = gate_instantiation(s)?;
@@ -167,8 +167,8 @@ pub(crate) fn module_or_generate_item_gate(s: Span) -> IResult<Span, ModuleOrGen
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_or_generate_item_udp(s: Span) -> IResult<Span, ModuleOrGenerateItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = udp_instantiation(s)?;
@@ -178,8 +178,8 @@ pub(crate) fn module_or_generate_item_udp(s: Span) -> IResult<Span, ModuleOrGene
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_or_generate_item_module(s: Span) -> IResult<Span, ModuleOrGenerateItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = module_instantiation(s)?;
@@ -189,9 +189,9 @@ pub(crate) fn module_or_generate_item_module(s: Span) -> IResult<Span, ModuleOrG
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_or_generate_item_module_item(s: Span) -> IResult<Span, ModuleOrGenerateItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = module_common_item(s)?;
@@ -203,8 +203,8 @@ pub(crate) fn module_or_generate_item_module_item(s: Span) -> IResult<Span, Modu
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_or_generate_item_declaration(
     s: Span,
 ) -> IResult<Span, ModuleOrGenerateItemDeclaration> {
@@ -223,8 +223,8 @@ pub(crate) fn module_or_generate_item_declaration(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_or_generate_item_declaration_clocking(
     s: Span,
 ) -> IResult<Span, ModuleOrGenerateItemDeclaration> {
@@ -242,8 +242,8 @@ pub(crate) fn module_or_generate_item_declaration_clocking(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn module_or_generate_item_declaration_disable(
     s: Span,
 ) -> IResult<Span, ModuleOrGenerateItemDeclaration> {
@@ -262,8 +262,8 @@ pub(crate) fn module_or_generate_item_declaration_disable(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn non_port_module_item(s: Span) -> IResult<Span, NonPortModuleItem> {
     alt((
         map(generate_region, |x| {
@@ -291,8 +291,8 @@ pub(crate) fn non_port_module_item(s: Span) -> IResult<Span, NonPortModuleItem> 
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn non_port_module_item_specparam(s: Span) -> IResult<Span, NonPortModuleItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = specparam_declaration(s)?;
@@ -302,8 +302,8 @@ pub(crate) fn non_port_module_item_specparam(s: Span) -> IResult<Span, NonPortMo
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn parameter_override(s: Span) -> IResult<Span, ParameterOverride> {
     let (s, a) = keyword("defparam")(s)?;
     let (s, b) = list_of_defparam_assignments(s)?;
@@ -311,14 +311,14 @@ pub(crate) fn parameter_override(s: Span) -> IResult<Span, ParameterOverride> {
     Ok((s, ParameterOverride { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn bind_directive(s: Span) -> IResult<Span, BindDirective> {
     alt((bind_directive_scope, bind_directive_instance))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn bind_directive_scope(s: Span) -> IResult<Span, BindDirective> {
     let (s, a) = keyword("bind")(s)?;
     let (s, b) = bind_target_scope(s)?;
@@ -332,8 +332,8 @@ pub(crate) fn bind_directive_scope(s: Span) -> IResult<Span, BindDirective> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn bind_directive_instance(s: Span) -> IResult<Span, BindDirective> {
     let (s, a) = keyword("bind")(s)?;
     let (s, b) = bind_target_instance(s)?;
@@ -344,8 +344,8 @@ pub(crate) fn bind_directive_instance(s: Span) -> IResult<Span, BindDirective> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn bind_target_scope(s: Span) -> IResult<Span, BindTargetScope> {
     alt((
         map(module_identifier, |x| {
@@ -357,23 +357,23 @@ pub(crate) fn bind_target_scope(s: Span) -> IResult<Span, BindTargetScope> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn bind_target_instance(s: Span) -> IResult<Span, BindTargetInstance> {
     let (s, a) = hierarchical_identifier(s)?;
     let (s, b) = constant_bit_select(s)?;
     Ok((s, BindTargetInstance { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn bind_target_instance_list(s: Span) -> IResult<Span, BindTargetInstanceList> {
     let (s, a) = list(symbol(","), bind_target_instance)(s)?;
     Ok((s, BindTargetInstanceList { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn bind_instantiation(s: Span) -> IResult<Span, BindInstantiation> {
     alt((
         map(program_instantiation, |x| {

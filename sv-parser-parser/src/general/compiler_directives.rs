@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn compiler_directive(s: Span) -> IResult<Span, CompilerDirective> {
     begin_directive();
     let ret = alt((
@@ -64,8 +64,8 @@ pub(crate) fn compiler_directive(s: Span) -> IResult<Span, CompilerDirective> {
     ret
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn compiler_directive_without_resetall(s: Span) -> IResult<Span, CompilerDirective> {
     begin_directive();
     let ret = alt((
@@ -123,16 +123,16 @@ pub(crate) fn compiler_directive_without_resetall(s: Span) -> IResult<Span, Comp
     ret
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn resetall_compiler_directive(s: Span) -> IResult<Span, ResetallCompilerDirective> {
     let (s, a) = symbol("`")(s)?;
     let (s, b) = keyword("resetall")(s)?;
     Ok((s, ResetallCompilerDirective { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn include_compiler_directive(s: Span) -> IResult<Span, IncludeCompilerDirective> {
     alt((
         include_compiler_directive_double_quote,
@@ -141,8 +141,8 @@ pub(crate) fn include_compiler_directive(s: Span) -> IResult<Span, IncludeCompil
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn include_compiler_directive_double_quote(
     s: Span,
 ) -> IResult<Span, IncludeCompilerDirective> {
@@ -157,8 +157,8 @@ pub(crate) fn include_compiler_directive_double_quote(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn include_compiler_directive_angle_bracket(
     s: Span,
 ) -> IResult<Span, IncludeCompilerDirective> {
@@ -173,8 +173,8 @@ pub(crate) fn include_compiler_directive_angle_bracket(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn include_compiler_directive_text_macro_usage(
     s: Span,
 ) -> IResult<Span, IncludeCompilerDirective> {
@@ -189,14 +189,14 @@ pub(crate) fn include_compiler_directive_text_macro_usage(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn angle_bracket_literal(s: Span) -> IResult<Span, AngleBracketLiteral> {
     let (s, a) = ws(angle_bracket_literal_impl)(s)?;
     Ok((s, AngleBracketLiteral { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn angle_bracket_literal_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = tag("<")(s)?;
     let (s, b) = is_not(">")(s)?;
@@ -208,8 +208,8 @@ pub(crate) fn angle_bracket_literal_impl(s: Span) -> IResult<Span, Locate> {
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn text_macro_definition(s: Span) -> IResult<Span, TextMacroDefinition> {
     let (s, a) = symbol("`")(s)?;
     let (s, b) = keyword("define")(s)?;
@@ -225,45 +225,45 @@ pub(crate) fn text_macro_definition(s: Span) -> IResult<Span, TextMacroDefinitio
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn text_macro_name(s: Span) -> IResult<Span, TextMacroName> {
     let (s, a) = text_macro_identifier_exact(s)?;
     let (s, b) = opt(paren_exact(list_of_formal_arguments))(s)?;
     Ok((s, TextMacroName { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn list_of_formal_arguments(s: Span) -> IResult<Span, ListOfFormalArguments> {
     let (s, a) = list(symbol(","), formal_argument)(s)?;
     Ok((s, ListOfFormalArguments { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn formal_argument(s: Span) -> IResult<Span, FormalArgument> {
     let (s, a) = simple_identifier(s)?;
     let (s, b) = opt(pair(symbol("="), default_text))(s)?;
     Ok((s, FormalArgument { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn text_macro_identifier(s: Span) -> IResult<Span, TextMacroIdentifier> {
     let (s, a) = identifier(s)?;
     Ok((s, TextMacroIdentifier { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn text_macro_identifier_exact(s: Span) -> IResult<Span, TextMacroIdentifier> {
     let (s, a) = identifier_exact(s)?;
     Ok((s, TextMacroIdentifier { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn macro_text(s: Span) -> IResult<Span, MacroText> {
     let (s, a) = many1(alt((
         tag("\\\n"),
@@ -290,8 +290,8 @@ pub(crate) fn macro_text(s: Span) -> IResult<Span, MacroText> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn default_text(s: Span) -> IResult<Span, DefaultText> {
     let (s, a) = define_argument(s)?;
     Ok((
@@ -302,8 +302,8 @@ pub(crate) fn default_text(s: Span) -> IResult<Span, DefaultText> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn text_macro_usage(s: Span) -> IResult<Span, TextMacroUsage> {
     let (s, a) = symbol("`")(s)?;
     begin_keywords("directive");
@@ -313,15 +313,15 @@ pub(crate) fn text_macro_usage(s: Span) -> IResult<Span, TextMacroUsage> {
     Ok((s, TextMacroUsage { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn list_of_actual_arguments(s: Span) -> IResult<Span, ListOfActualArguments> {
     let (s, a) = list(symbol(","), opt(actual_argument))(s)?;
     Ok((s, ListOfActualArguments { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn actual_argument(s: Span) -> IResult<Span, ActualArgument> {
     let (s, a) = define_argument(s)?;
     Ok((
@@ -332,7 +332,7 @@ pub(crate) fn actual_argument(s: Span) -> IResult<Span, ActualArgument> {
     ))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn define_argument(s: Span) -> IResult<Span, Span> {
     let (s, a) = many1(alt((
         is_not(",([{}])\""),
@@ -353,7 +353,7 @@ pub(crate) fn define_argument(s: Span) -> IResult<Span, Span> {
     Ok((s, a))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn define_argument_inner(s: Span) -> IResult<Span, Span> {
     let (s, a) = many1(alt((
         is_not("([{}])\""),
@@ -374,7 +374,7 @@ pub(crate) fn define_argument_inner(s: Span) -> IResult<Span, Span> {
     Ok((s, a))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn define_argument_str(s: Span) -> IResult<Span, Span> {
     let (s, (a, b, c)) = triple(tag("\""), opt(is_not("\"")), tag("\""))(s)?;
     let a = if let Some(b) = b {
@@ -385,8 +385,8 @@ pub(crate) fn define_argument_str(s: Span) -> IResult<Span, Span> {
     Ok((s, a))
 }
 
-#[recursive_parser]
-#[tracable_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn define_argument_paren(s: Span) -> IResult<Span, Span> {
     let (s, (a, b, c)) = triple(tag("("), opt(define_argument_inner), tag(")"))(s)?;
     let a = if let Some(b) = b {
@@ -397,8 +397,8 @@ pub(crate) fn define_argument_paren(s: Span) -> IResult<Span, Span> {
     Ok((s, a))
 }
 
-#[recursive_parser]
-#[tracable_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn define_argument_bracket(s: Span) -> IResult<Span, Span> {
     let (s, (a, b, c)) = triple(tag("["), opt(define_argument_inner), tag("]"))(s)?;
     let a = if let Some(b) = b {
@@ -409,8 +409,8 @@ pub(crate) fn define_argument_bracket(s: Span) -> IResult<Span, Span> {
     Ok((s, a))
 }
 
-#[recursive_parser]
-#[tracable_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn define_argument_brace(s: Span) -> IResult<Span, Span> {
     let (s, (a, b, c)) = triple(tag("{"), opt(define_argument_inner), tag("}"))(s)?;
     let a = if let Some(b) = b {
@@ -421,8 +421,8 @@ pub(crate) fn define_argument_brace(s: Span) -> IResult<Span, Span> {
     Ok((s, a))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn undefine_compiler_directive(s: Span) -> IResult<Span, UndefineCompilerDirective> {
     let (s, a) = symbol("`")(s)?;
     let (s, b) = keyword("undef")(s)?;
@@ -430,8 +430,8 @@ pub(crate) fn undefine_compiler_directive(s: Span) -> IResult<Span, UndefineComp
     Ok((s, UndefineCompilerDirective { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn undefineall_compiler_directive(
     s: Span,
 ) -> IResult<Span, UndefineallCompilerDirective> {
@@ -440,8 +440,8 @@ pub(crate) fn undefineall_compiler_directive(
     Ok((s, UndefineallCompilerDirective { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn conditional_compiler_directive(
     s: Span,
 ) -> IResult<Span, ConditionalCompilerDirective> {
@@ -455,8 +455,8 @@ pub(crate) fn conditional_compiler_directive(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn ifdef_directive(s: Span) -> IResult<Span, IfdefDirective> {
     let (s, a) = symbol("`")(s)?;
     let (s, b) = keyword("ifdef")(s)?;
@@ -479,8 +479,8 @@ pub(crate) fn ifdef_directive(s: Span) -> IResult<Span, IfdefDirective> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn ifndef_directive(s: Span) -> IResult<Span, IfndefDirective> {
     let (s, a) = symbol("`")(s)?;
     let (s, b) = keyword("ifndef")(s)?;
@@ -503,8 +503,8 @@ pub(crate) fn ifndef_directive(s: Span) -> IResult<Span, IfndefDirective> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn ifdef_group_of_lines(s: Span) -> IResult<Span, IfdefGroupOfLines> {
     let (s, a) = many0(preceded(
         peek(not(alt((tag("`elsif"), tag("`else"), tag("`endif"))))),
@@ -513,8 +513,8 @@ pub(crate) fn ifdef_group_of_lines(s: Span) -> IResult<Span, IfdefGroupOfLines> 
     Ok((s, IfdefGroupOfLines { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn ifndef_group_of_lines(s: Span) -> IResult<Span, IfndefGroupOfLines> {
     let (s, a) = many0(preceded(
         peek(not(alt((tag("`elsif"), tag("`else"), tag("`endif"))))),
@@ -523,8 +523,8 @@ pub(crate) fn ifndef_group_of_lines(s: Span) -> IResult<Span, IfndefGroupOfLines
     Ok((s, IfndefGroupOfLines { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn elsif_group_of_lines(s: Span) -> IResult<Span, ElsifGroupOfLines> {
     let (s, a) = many0(preceded(
         peek(not(alt((tag("`elsif"), tag("`else"), tag("`endif"))))),
@@ -533,15 +533,15 @@ pub(crate) fn elsif_group_of_lines(s: Span) -> IResult<Span, ElsifGroupOfLines> 
     Ok((s, ElsifGroupOfLines { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn else_group_of_lines(s: Span) -> IResult<Span, ElseGroupOfLines> {
     let (s, a) = many0(preceded(peek(not(tag("`endif"))), source_description))(s)?;
     Ok((s, ElseGroupOfLines { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn source_description(s: Span) -> IResult<Span, SourceDescription> {
     alt((
         map(comment, |x| SourceDescription::Comment(Box::new(x))),
@@ -558,8 +558,8 @@ pub(crate) fn source_description(s: Span) -> IResult<Span, SourceDescription> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn source_description_not_directive(s: Span) -> IResult<Span, SourceDescription> {
     let (s, a) = many1(alt((
         is_not("`/\"\\"),
@@ -583,8 +583,8 @@ pub(crate) fn source_description_not_directive(s: Span) -> IResult<Span, SourceD
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn timescale_compiler_directive(s: Span) -> IResult<Span, TimescaleCompilerDirective> {
     let (s, a) = symbol("`")(s)?;
     let (s, b) = keyword("timescale")(s)?;
@@ -601,8 +601,8 @@ pub(crate) fn timescale_compiler_directive(s: Span) -> IResult<Span, TimescaleCo
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn default_nettype_compiler_directive(
     s: Span,
 ) -> IResult<Span, DefaultNettypeCompilerDirective> {
@@ -612,8 +612,8 @@ pub(crate) fn default_nettype_compiler_directive(
     Ok((s, DefaultNettypeCompilerDirective { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn default_nettype_value(s: Span) -> IResult<Span, DefaultNettypeValue> {
     let (s, a) = alt((
         keyword("none"),
@@ -631,8 +631,8 @@ pub(crate) fn default_nettype_value(s: Span) -> IResult<Span, DefaultNettypeValu
     Ok((s, DefaultNettypeValue { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn unconnected_drive_compiler_directive(
     s: Span,
 ) -> IResult<Span, UnconnectedDriveCompilerDirective> {
@@ -642,8 +642,8 @@ pub(crate) fn unconnected_drive_compiler_directive(
     Ok((s, UnconnectedDriveCompilerDirective { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn nounconnected_drive_compiler_directive(
     s: Span,
 ) -> IResult<Span, NounconnectedDriveCompilerDirective> {
@@ -652,8 +652,8 @@ pub(crate) fn nounconnected_drive_compiler_directive(
     Ok((s, NounconnectedDriveCompilerDirective { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn celldefine_compiler_directive(
     s: Span,
 ) -> IResult<Span, CelldefineDriveCompilerDirective> {
@@ -662,8 +662,8 @@ pub(crate) fn celldefine_compiler_directive(
     Ok((s, CelldefineDriveCompilerDirective { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn endcelldefine_compiler_directive(
     s: Span,
 ) -> IResult<Span, EndcelldefineDriveCompilerDirective> {
@@ -672,8 +672,8 @@ pub(crate) fn endcelldefine_compiler_directive(
     Ok((s, EndcelldefineDriveCompilerDirective { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn pragma(s: Span) -> IResult<Span, Pragma> {
     let (s, a) = symbol("`")(s)?;
     let (s, b) = keyword("pragma")(s)?;
@@ -687,15 +687,15 @@ pub(crate) fn pragma(s: Span) -> IResult<Span, Pragma> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn pragma_name(s: Span) -> IResult<Span, PragmaName> {
     let (s, a) = simple_identifier(s)?;
     Ok((s, PragmaName { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn pragma_expression(s: Span) -> IResult<Span, PragmaExpression> {
     alt((
         pragma_expression_assignment,
@@ -706,8 +706,8 @@ pub(crate) fn pragma_expression(s: Span) -> IResult<Span, PragmaExpression> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn pragma_expression_assignment(s: Span) -> IResult<Span, PragmaExpression> {
     let (s, a) = pragma_keyword(s)?;
     let (s, b) = symbol("=")(s)?;
@@ -718,8 +718,8 @@ pub(crate) fn pragma_expression_assignment(s: Span) -> IResult<Span, PragmaExpre
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn pragma_value(s: Span) -> IResult<Span, PragmaValue> {
     alt((
         pragma_value_paren,
@@ -729,8 +729,8 @@ pub(crate) fn pragma_value(s: Span) -> IResult<Span, PragmaValue> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn pragma_value_paren(s: Span) -> IResult<Span, PragmaValue> {
     let (s, a) = paren(list(symbol(","), pragma_expression))(s)?;
     Ok((
@@ -739,15 +739,15 @@ pub(crate) fn pragma_value_paren(s: Span) -> IResult<Span, PragmaValue> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn pragma_keyword(s: Span) -> IResult<Span, PragmaKeyword> {
     let (s, a) = simple_identifier_pragma(s)?;
     Ok((s, PragmaKeyword { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn identifier_pragma(s: Span) -> IResult<Span, Identifier> {
     alt((
         map(escaped_identifier, |x| {
@@ -759,14 +759,14 @@ pub(crate) fn identifier_pragma(s: Span) -> IResult<Span, Identifier> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn simple_identifier_pragma(s: Span) -> IResult<Span, SimpleIdentifier> {
     let (s, a) = ws(simple_identifier_pragma_impl)(s)?;
     Ok((s, SimpleIdentifier { nodes: a }))
 }
 
-#[tracable_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
 pub(crate) fn simple_identifier_pragma_impl(s: Span) -> IResult<Span, Locate> {
     let (s, a) = is_a(AZ_)(s)?;
     let (s, b) = opt(is_a(AZ09_DOLLAR))(s)?;
@@ -778,8 +778,8 @@ pub(crate) fn simple_identifier_pragma_impl(s: Span) -> IResult<Span, Locate> {
     Ok((s, into_locate(a)))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn line_compiler_directive(s: Span) -> IResult<Span, LineCompilerDirective> {
     let (s, a) = symbol("`")(s)?;
     let (s, b) = keyword("line")(s)?;
@@ -794,23 +794,23 @@ pub(crate) fn line_compiler_directive(s: Span) -> IResult<Span, LineCompilerDire
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn position_compiler_directive(s: Span) -> IResult<Span, PositionCompilerDirective> {
     let (s, a) = symbol("`")(s)?;
     let (s, b) = alt((keyword("__FILE__"), keyword("__LINE__")))(s)?;
     Ok((s, PositionCompilerDirective { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn level(s: Span) -> IResult<Span, Level> {
     let (s, a) = alt((symbol("0"), symbol("1"), symbol("2")))(s)?;
     Ok((s, Level { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn keywords_directive(s: Span) -> IResult<Span, KeywordsDirective> {
     let (s, a) = symbol("`")(s)?;
     let (s, b) = keyword("begin_keywords")(s)?;
@@ -825,8 +825,8 @@ pub(crate) fn keywords_directive(s: Span) -> IResult<Span, KeywordsDirective> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn version_specifier(s: Span) -> IResult<Span, VersionSpecifier> {
     let (s, a) = alt((
         map(keyword("1800-2017"), |x| {
@@ -865,8 +865,8 @@ pub(crate) fn version_specifier(s: Span) -> IResult<Span, VersionSpecifier> {
     Ok((s, VersionSpecifier { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn endkeywords_directive(s: Span) -> IResult<Span, EndkeywordsDirective> {
     let (s, a) = symbol("`")(s)?;
     let (s, b) = keyword("end_keywords")(s)?;

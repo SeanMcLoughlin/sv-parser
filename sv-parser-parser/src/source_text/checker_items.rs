@@ -2,15 +2,15 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn checker_port_list(s: Span) -> IResult<Span, CheckerPortList> {
     let (s, a) = list(symbol(","), checker_port_item)(s)?;
     Ok((s, CheckerPortList { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn checker_port_item(s: Span) -> IResult<Span, CheckerPortItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = opt(checker_port_direction)(s)?;
@@ -26,8 +26,8 @@ pub(crate) fn checker_port_item(s: Span) -> IResult<Span, CheckerPortItem> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn checker_port_direction(s: Span) -> IResult<Span, CheckerPortDirection> {
     alt((
         map(keyword("input"), |x| {
@@ -39,8 +39,8 @@ pub(crate) fn checker_port_direction(s: Span) -> IResult<Span, CheckerPortDirect
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn checker_or_generate_item(s: Span) -> IResult<Span, CheckerOrGenerateItem> {
     alt((
         map(checker_or_generate_item_declaration, |x| {
@@ -67,8 +67,8 @@ pub(crate) fn checker_or_generate_item(s: Span) -> IResult<Span, CheckerOrGenera
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn checker_or_generate_item_declaration(
     s: Span,
 ) -> IResult<Span, CheckerOrGenerateItemDeclaration> {
@@ -100,8 +100,8 @@ pub(crate) fn checker_or_generate_item_declaration(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn checker_or_generate_item_declaration_data(
     s: Span,
 ) -> IResult<Span, CheckerOrGenerateItemDeclaration> {
@@ -115,15 +115,15 @@ pub(crate) fn checker_or_generate_item_declaration_data(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn rand(s: Span) -> IResult<Span, Rand> {
     let (s, a) = keyword("rand")(s)?;
     Ok((s, Rand { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn checker_or_generate_item_declaration_clocking(
     s: Span,
 ) -> IResult<Span, CheckerOrGenerateItemDeclaration> {
@@ -141,8 +141,8 @@ pub(crate) fn checker_or_generate_item_declaration_clocking(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn checker_or_generate_item_declaration_disable(
     s: Span,
 ) -> IResult<Span, CheckerOrGenerateItemDeclaration> {
@@ -161,8 +161,8 @@ pub(crate) fn checker_or_generate_item_declaration_disable(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn checker_generate_item(s: Span) -> IResult<Span, CheckerGenerateItem> {
     alt((
         map(loop_generate_construct, |x| {

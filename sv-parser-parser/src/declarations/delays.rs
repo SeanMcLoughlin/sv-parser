@@ -2,22 +2,22 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay3(s: Span) -> IResult<Span, Delay3> {
     alt((delay3_single, delay3_mintypmax))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay3_single(s: Span) -> IResult<Span, Delay3> {
     let (s, a) = symbol("#")(s)?;
     let (s, b) = delay_value(s)?;
     Ok((s, Delay3::Single(Box::new(Delay3Single { nodes: (a, b) }))))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay3_mintypmax(s: Span) -> IResult<Span, Delay3> {
     let (s, a) = symbol("#")(s)?;
     let (s, b) = paren(pair(
@@ -34,22 +34,22 @@ pub(crate) fn delay3_mintypmax(s: Span) -> IResult<Span, Delay3> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay2(s: Span) -> IResult<Span, Delay2> {
     alt((delay2_single, delay2_mintypmax))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay2_single(s: Span) -> IResult<Span, Delay2> {
     let (s, a) = symbol("#")(s)?;
     let (s, b) = delay_value(s)?;
     Ok((s, Delay2::Single(Box::new(Delay2Single { nodes: (a, b) }))))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay2_mintypmax(s: Span) -> IResult<Span, Delay2> {
     let (s, a) = symbol("#")(s)?;
     let (s, b) = paren(pair(
@@ -62,8 +62,8 @@ pub(crate) fn delay2_mintypmax(s: Span) -> IResult<Span, Delay2> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn delay_value(s: Span) -> IResult<Span, DelayValue> {
     alt((
         map(keyword("1step"), |x| DelayValue::Step1(Box::new(x))),

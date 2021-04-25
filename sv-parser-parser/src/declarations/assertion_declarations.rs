@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn concurrent_assertion_item(s: Span) -> IResult<Span, ConcurrentAssertionItem> {
     alt((
         concurrent_assertion_item_statement,
@@ -13,8 +13,8 @@ pub(crate) fn concurrent_assertion_item(s: Span) -> IResult<Span, ConcurrentAsse
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn concurrent_assertion_item_statement(
     s: Span,
 ) -> IResult<Span, ConcurrentAssertionItem> {
@@ -28,8 +28,8 @@ pub(crate) fn concurrent_assertion_item_statement(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn concurrent_assertion_statement(
     s: Span,
 ) -> IResult<Span, ConcurrentAssertionStatement> {
@@ -52,8 +52,8 @@ pub(crate) fn concurrent_assertion_statement(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn assert_property_statement(s: Span) -> IResult<Span, AssertPropertyStatement> {
     let (s, a) = keyword("assert")(s)?;
     let (s, b) = keyword("property")(s)?;
@@ -67,8 +67,8 @@ pub(crate) fn assert_property_statement(s: Span) -> IResult<Span, AssertProperty
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn assume_property_statement(s: Span) -> IResult<Span, AssumePropertyStatement> {
     let (s, a) = keyword("assume")(s)?;
     let (s, b) = keyword("property")(s)?;
@@ -82,8 +82,8 @@ pub(crate) fn assume_property_statement(s: Span) -> IResult<Span, AssumeProperty
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn cover_property_statement(s: Span) -> IResult<Span, CoverPropertyStatement> {
     let (s, a) = keyword("cover")(s)?;
     let (s, b) = keyword("property")(s)?;
@@ -97,8 +97,8 @@ pub(crate) fn cover_property_statement(s: Span) -> IResult<Span, CoverPropertySt
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn expect_property_statement(s: Span) -> IResult<Span, ExpectPropertyStatement> {
     let (s, a) = keyword("expect")(s)?;
     let (s, b) = paren(property_spec)(s)?;
@@ -106,8 +106,8 @@ pub(crate) fn expect_property_statement(s: Span) -> IResult<Span, ExpectProperty
     Ok((s, ExpectPropertyStatement { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn cover_sequence_statement(s: Span) -> IResult<Span, CoverSequenceStatement> {
     let (s, a) = keyword("cover")(s)?;
     let (s, b) = keyword("sequence")(s)?;
@@ -129,8 +129,8 @@ pub(crate) fn cover_sequence_statement(s: Span) -> IResult<Span, CoverSequenceSt
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn restrict_property_statement(s: Span) -> IResult<Span, RestrictPropertyStatement> {
     let (s, a) = keyword("restrict")(s)?;
     let (s, b) = keyword("property")(s)?;
@@ -144,16 +144,16 @@ pub(crate) fn restrict_property_statement(s: Span) -> IResult<Span, RestrictProp
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_instance(s: Span) -> IResult<Span, PropertyInstance> {
     let (s, a) = ps_or_hierarchical_property_identifier(s)?;
     let (s, b) = opt(paren(opt(property_list_of_arguments)))(s)?;
     Ok((s, PropertyInstance { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_list_of_arguments(s: Span) -> IResult<Span, PropertyListOfArguments> {
     alt((
         property_list_of_arguments_named,
@@ -161,9 +161,9 @@ pub(crate) fn property_list_of_arguments(s: Span) -> IResult<Span, PropertyListO
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_list_of_arguments_ordered(
     s: Span,
 ) -> IResult<Span, PropertyListOfArguments> {
@@ -182,8 +182,8 @@ pub(crate) fn property_list_of_arguments_ordered(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_list_of_arguments_named(s: Span) -> IResult<Span, PropertyListOfArguments> {
     let (s, a) = list(
         symbol(","),
@@ -195,8 +195,8 @@ pub(crate) fn property_list_of_arguments_named(s: Span) -> IResult<Span, Propert
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_actual_arg(s: Span) -> IResult<Span, PropertyActualArg> {
     alt((
         map(property_expr, |x| {
@@ -208,8 +208,8 @@ pub(crate) fn property_actual_arg(s: Span) -> IResult<Span, PropertyActualArg> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn assertion_item_declaration(s: Span) -> IResult<Span, AssertionItemDeclaration> {
     alt((
         map(property_declaration, |x| {
@@ -224,8 +224,8 @@ pub(crate) fn assertion_item_declaration(s: Span) -> IResult<Span, AssertionItem
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_declaration(s: Span) -> IResult<Span, PropertyDeclaration> {
     let (s, a) = keyword("property")(s)?;
     let (s, b) = property_identifier(s)?;
@@ -244,15 +244,15 @@ pub(crate) fn property_declaration(s: Span) -> IResult<Span, PropertyDeclaration
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_port_list(s: Span) -> IResult<Span, PropertyPortList> {
     let (s, a) = list(symbol(","), property_port_item)(s)?;
     Ok((s, PropertyPortList { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_port_item(s: Span) -> IResult<Span, PropertyPortItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = opt(pair(keyword("local"), opt(property_lvar_port_direction)))(s)?;
@@ -268,15 +268,15 @@ pub(crate) fn property_port_item(s: Span) -> IResult<Span, PropertyPortItem> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_lvar_port_direction(s: Span) -> IResult<Span, PropertyLvarPortDirection> {
     let (s, a) = keyword("input")(s)?;
     Ok((s, PropertyLvarPortDirection::Input(Box::new(a))))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_formal_type(s: Span) -> IResult<Span, PropertyFormalType> {
     alt((
         map(sequence_formal_type, |x| {
@@ -288,9 +288,9 @@ pub(crate) fn property_formal_type(s: Span) -> IResult<Span, PropertyFormalType>
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_spec(s: Span) -> IResult<Span, PropertySpec> {
     let (s, a) = opt(clocking_event)(s)?;
     let (s, b) = opt(triple(
@@ -302,8 +302,8 @@ pub(crate) fn property_spec(s: Span) -> IResult<Span, PropertySpec> {
     Ok((s, PropertySpec { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr(s: Span) -> IResult<Span, PropertyExpr> {
     alt((
         alt((
@@ -338,8 +338,8 @@ pub(crate) fn property_expr(s: Span) -> IResult<Span, PropertyExpr> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_strong(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("strong")(s)?;
     let (s, b) = paren(sequence_expr)(s)?;
@@ -349,8 +349,8 @@ pub(crate) fn property_expr_strong(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_weak(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("weak")(s)?;
     let (s, b) = paren(sequence_expr)(s)?;
@@ -360,8 +360,8 @@ pub(crate) fn property_expr_weak(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_paren(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = paren(property_expr)(s)?;
     Ok((
@@ -370,8 +370,8 @@ pub(crate) fn property_expr_paren(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_not(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("not")(s)?;
     let (s, b) = property_expr(s)?;
@@ -381,9 +381,9 @@ pub(crate) fn property_expr_not(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_binary_property(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = property_expr(s)?;
     let (s, b) = alt((
@@ -403,9 +403,9 @@ pub(crate) fn property_expr_binary_property(s: Span) -> IResult<Span, PropertyEx
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_binary_sequence(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = sequence_expr(s)?;
     let (s, b) = alt((symbol("|->"), symbol("|=>"), symbol("#-#"), symbol("#=#")))(s)?;
@@ -416,8 +416,8 @@ pub(crate) fn property_expr_binary_sequence(s: Span) -> IResult<Span, PropertyEx
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_if(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("if")(s)?;
     let (s, b) = paren(expression_or_dist)(s)?;
@@ -431,8 +431,8 @@ pub(crate) fn property_expr_if(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_case(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("case")(s)?;
     let (s, b) = paren(expression_or_dist)(s)?;
@@ -445,8 +445,8 @@ pub(crate) fn property_expr_case(s: Span) -> IResult<Span, PropertyExpr> {
         })),
     ))
 }
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_nexttime(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("nexttime")(s)?;
     let (s, b) = opt(bracket(constant_expression))(s)?;
@@ -457,8 +457,8 @@ pub(crate) fn property_expr_nexttime(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_s_nexttime(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("s_nexttime")(s)?;
     let (s, b) = opt(bracket(constant_expression))(s)?;
@@ -469,8 +469,8 @@ pub(crate) fn property_expr_s_nexttime(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_always(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("always")(s)?;
     let (s, b) = opt(bracket(cycle_delay_const_range_expression))(s)?;
@@ -481,8 +481,8 @@ pub(crate) fn property_expr_always(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_s_always(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("s_always")(s)?;
     let (s, b) = bracket(cycle_delay_const_range_expression)(s)?;
@@ -493,8 +493,8 @@ pub(crate) fn property_expr_s_always(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_eventually(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("eventually")(s)?;
     let (s, b) = bracket(constant_range)(s)?;
@@ -505,8 +505,8 @@ pub(crate) fn property_expr_eventually(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_s_eventually(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("s_eventually")(s)?;
     let (s, b) = opt(bracket(cycle_delay_const_range_expression))(s)?;
@@ -517,8 +517,8 @@ pub(crate) fn property_expr_s_eventually(s: Span) -> IResult<Span, PropertyExpr>
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_accept_on(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("accept_on")(s)?;
     let (s, b) = paren(expression_or_dist)(s)?;
@@ -529,8 +529,8 @@ pub(crate) fn property_expr_accept_on(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_reject_on(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("reject_on")(s)?;
     let (s, b) = paren(expression_or_dist)(s)?;
@@ -541,8 +541,8 @@ pub(crate) fn property_expr_reject_on(s: Span) -> IResult<Span, PropertyExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_sync_accept_on(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("sync_accept_on")(s)?;
     let (s, b) = paren(expression_or_dist)(s)?;
@@ -553,8 +553,8 @@ pub(crate) fn property_expr_sync_accept_on(s: Span) -> IResult<Span, PropertyExp
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_sync_reject_on(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = keyword("sync_reject_on")(s)?;
     let (s, b) = paren(expression_or_dist)(s)?;
@@ -565,8 +565,8 @@ pub(crate) fn property_expr_sync_reject_on(s: Span) -> IResult<Span, PropertyExp
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_expr_clocking_event(s: Span) -> IResult<Span, PropertyExpr> {
     let (s, a) = clocking_event(s)?;
     let (s, b) = property_expr(s)?;
@@ -576,15 +576,15 @@ pub(crate) fn property_expr_clocking_event(s: Span) -> IResult<Span, PropertyExp
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_case_item(s: Span) -> IResult<Span, PropertyCaseItem> {
     alt((property_case_item_nondefault, property_case_item_default))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_case_item_nondefault(s: Span) -> IResult<Span, PropertyCaseItem> {
     let (s, a) = list(symbol(","), expression_or_dist)(s)?;
     let (s, b) = symbol(":")(s)?;
@@ -598,8 +598,8 @@ pub(crate) fn property_case_item_nondefault(s: Span) -> IResult<Span, PropertyCa
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn property_case_item_default(s: Span) -> IResult<Span, PropertyCaseItem> {
     let (s, a) = keyword("default")(s)?;
     let (s, b) = opt(symbol(":"))(s)?;
@@ -613,8 +613,8 @@ pub(crate) fn property_case_item_default(s: Span) -> IResult<Span, PropertyCaseI
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_declaration(s: Span) -> IResult<Span, SequenceDeclaration> {
     let (s, a) = keyword("sequence")(s)?;
     let (s, b) = sequence_identifier(s)?;
@@ -633,15 +633,15 @@ pub(crate) fn sequence_declaration(s: Span) -> IResult<Span, SequenceDeclaration
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_port_list(s: Span) -> IResult<Span, SequencePortList> {
     let (s, a) = list(symbol(","), sequence_port_item)(s)?;
     Ok((s, SequencePortList { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_port_item(s: Span) -> IResult<Span, SequencePortItem> {
     let (s, a) = many0(attribute_instance)(s)?;
     let (s, b) = opt(pair(keyword("local"), opt(sequence_lvar_port_direction)))(s)?;
@@ -657,8 +657,8 @@ pub(crate) fn sequence_port_item(s: Span) -> IResult<Span, SequencePortItem> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_lvar_port_direction(s: Span) -> IResult<Span, SequenceLvarPortDirection> {
     alt((
         map(keyword("input"), |x| {
@@ -673,8 +673,8 @@ pub(crate) fn sequence_lvar_port_direction(s: Span) -> IResult<Span, SequenceLva
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_formal_type(s: Span) -> IResult<Span, SequenceFormalType> {
     alt((
         map(data_type_or_implicit_sequence_formal_type, |x| {
@@ -689,8 +689,8 @@ pub(crate) fn sequence_formal_type(s: Span) -> IResult<Span, SequenceFormalType>
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn data_type_or_implicit_sequence_formal_type(
     s: Span,
 ) -> IResult<Span, DataTypeOrImplicit> {
@@ -705,8 +705,8 @@ pub(crate) fn data_type_or_implicit_sequence_formal_type(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_expr(s: Span) -> IResult<Span, SequenceExpr> {
     alt((
         sequence_expr_binary,
@@ -721,8 +721,8 @@ pub(crate) fn sequence_expr(s: Span) -> IResult<Span, SequenceExpr> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_expr_cycle_delay_expr(s: Span) -> IResult<Span, SequenceExpr> {
     let (s, a) = cycle_delay_range(s)?;
     let (s, b) = sequence_expr(s)?;
@@ -733,9 +733,9 @@ pub(crate) fn sequence_expr_cycle_delay_expr(s: Span) -> IResult<Span, SequenceE
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_expr_expr_cycle_delay_expr(s: Span) -> IResult<Span, SequenceExpr> {
     let (s, a) = sequence_expr(s)?;
     let (s, b) = cycle_delay_range(s)?;
@@ -749,9 +749,9 @@ pub(crate) fn sequence_expr_expr_cycle_delay_expr(s: Span) -> IResult<Span, Sequ
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_expr_expression(s: Span) -> IResult<Span, SequenceExpr> {
     let (s, a) = expression_or_dist(s)?;
     let (s, b) = opt(boolean_abbrev)(s)?;
@@ -761,8 +761,8 @@ pub(crate) fn sequence_expr_expression(s: Span) -> IResult<Span, SequenceExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_expr_instance(s: Span) -> IResult<Span, SequenceExpr> {
     let (s, a) = sequence_instance(s)?;
     let (s, b) = opt(sequence_abbrev)(s)?;
@@ -772,8 +772,8 @@ pub(crate) fn sequence_expr_instance(s: Span) -> IResult<Span, SequenceExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_expr_paren(s: Span) -> IResult<Span, SequenceExpr> {
     let (s, a) = paren(pair(
         sequence_expr,
@@ -786,9 +786,9 @@ pub(crate) fn sequence_expr_paren(s: Span) -> IResult<Span, SequenceExpr> {
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_expr_binary(s: Span) -> IResult<Span, SequenceExpr> {
     let (s, a) = sequence_expr(s)?;
     let (s, b) = alt((
@@ -804,8 +804,8 @@ pub(crate) fn sequence_expr_binary(s: Span) -> IResult<Span, SequenceExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_expr_first_match(s: Span) -> IResult<Span, SequenceExpr> {
     let (s, a) = keyword("first_match")(s)?;
     let (s, b) = paren(pair(
@@ -818,9 +818,9 @@ pub(crate) fn sequence_expr_first_match(s: Span) -> IResult<Span, SequenceExpr> 
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_expr_throughout(s: Span) -> IResult<Span, SequenceExpr> {
     let (s, a) = expression_or_dist(s)?;
     let (s, b) = keyword("throughout")(s)?;
@@ -831,8 +831,8 @@ pub(crate) fn sequence_expr_throughout(s: Span) -> IResult<Span, SequenceExpr> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_expr_clocking_event(s: Span) -> IResult<Span, SequenceExpr> {
     let (s, a) = clocking_event(s)?;
     let (s, b) = sequence_expr(s)?;
@@ -842,8 +842,8 @@ pub(crate) fn sequence_expr_clocking_event(s: Span) -> IResult<Span, SequenceExp
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn cycle_delay_range(s: Span) -> IResult<Span, CycleDelayRange> {
     alt((
         cycle_delay_range_primary,
@@ -853,8 +853,8 @@ pub(crate) fn cycle_delay_range(s: Span) -> IResult<Span, CycleDelayRange> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn cycle_delay_range_primary(s: Span) -> IResult<Span, CycleDelayRange> {
     let (s, a) = symbol("##")(s)?;
     let (s, b) = constant_primary(s)?;
@@ -864,8 +864,8 @@ pub(crate) fn cycle_delay_range_primary(s: Span) -> IResult<Span, CycleDelayRang
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn cycle_delay_range_expression(s: Span) -> IResult<Span, CycleDelayRange> {
     let (s, a) = symbol("##")(s)?;
     let (s, b) = bracket(cycle_delay_const_range_expression)(s)?;
@@ -875,8 +875,8 @@ pub(crate) fn cycle_delay_range_expression(s: Span) -> IResult<Span, CycleDelayR
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn cycle_delay_range_asterisk(s: Span) -> IResult<Span, CycleDelayRange> {
     let (s, a) = symbol("##")(s)?;
     let (s, b) = bracket(symbol("*"))(s)?;
@@ -886,8 +886,8 @@ pub(crate) fn cycle_delay_range_asterisk(s: Span) -> IResult<Span, CycleDelayRan
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn cycle_delay_range_plus(s: Span) -> IResult<Span, CycleDelayRange> {
     let (s, a) = symbol("##")(s)?;
     let (s, b) = bracket(symbol("+"))(s)?;
@@ -897,8 +897,8 @@ pub(crate) fn cycle_delay_range_plus(s: Span) -> IResult<Span, CycleDelayRange> 
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_method_call(s: Span) -> IResult<Span, SequenceMethodCall> {
     let (s, a) = sequence_instance(s)?;
     let (s, b) = symbol(".")(s)?;
@@ -906,8 +906,8 @@ pub(crate) fn sequence_method_call(s: Span) -> IResult<Span, SequenceMethodCall>
     Ok((s, SequenceMethodCall { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_match_item(s: Span) -> IResult<Span, SequenceMatchItem> {
     alt((
         map(operator_assignment, |x| {
@@ -922,16 +922,16 @@ pub(crate) fn sequence_match_item(s: Span) -> IResult<Span, SequenceMatchItem> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_instance(s: Span) -> IResult<Span, SequenceInstance> {
     let (s, a) = ps_or_hierarchical_sequence_identifier(s)?;
     let (s, b) = opt(paren(opt(sequence_list_of_arguments)))(s)?;
     Ok((s, SequenceInstance { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_list_of_arguments(s: Span) -> IResult<Span, SequenceListOfArguments> {
     alt((
         sequence_list_of_arguments_named,
@@ -939,9 +939,9 @@ pub(crate) fn sequence_list_of_arguments(s: Span) -> IResult<Span, SequenceListO
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_list_of_arguments_ordered(
     s: Span,
 ) -> IResult<Span, SequenceListOfArguments> {
@@ -960,8 +960,8 @@ pub(crate) fn sequence_list_of_arguments_ordered(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_list_of_arguments_named(s: Span) -> IResult<Span, SequenceListOfArguments> {
     let (s, a) = list(
         symbol(","),
@@ -973,8 +973,8 @@ pub(crate) fn sequence_list_of_arguments_named(s: Span) -> IResult<Span, Sequenc
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_actual_arg(s: Span) -> IResult<Span, SequenceActualArg> {
     alt((
         map(sequence_expr, |x| {
@@ -986,8 +986,8 @@ pub(crate) fn sequence_actual_arg(s: Span) -> IResult<Span, SequenceActualArg> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_expression_sequence_actual_arg(s: Span) -> IResult<Span, EventExpression> {
     alt((
         event_expression_or_sequence_actual_arg,
@@ -997,9 +997,9 @@ pub(crate) fn event_expression_sequence_actual_arg(s: Span) -> IResult<Span, Eve
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn event_expression_or_sequence_actual_arg(s: Span) -> IResult<Span, EventExpression> {
     let (s, a) = event_expression_sequence_actual_arg(s)?;
     let (s, b) = keyword("or")(s)?;
@@ -1010,8 +1010,8 @@ pub(crate) fn event_expression_or_sequence_actual_arg(s: Span) -> IResult<Span, 
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn boolean_abbrev(s: Span) -> IResult<Span, BooleanAbbrev> {
     alt((
         map(consecutive_repetition, |x| {
@@ -1026,15 +1026,15 @@ pub(crate) fn boolean_abbrev(s: Span) -> IResult<Span, BooleanAbbrev> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn sequence_abbrev(s: Span) -> IResult<Span, SequenceAbbrev> {
     let (s, a) = consecutive_repetition(s)?;
     Ok((s, SequenceAbbrev { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn consecutive_repetition(s: Span) -> IResult<Span, ConsecutiveRepetition> {
     alt((
         consecutive_repetition_expression,
@@ -1043,8 +1043,8 @@ pub(crate) fn consecutive_repetition(s: Span) -> IResult<Span, ConsecutiveRepeti
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn consecutive_repetition_expression(s: Span) -> IResult<Span, ConsecutiveRepetition> {
     let (s, a) = bracket(pair(symbol("*"), const_or_range_expression))(s)?;
     Ok((
@@ -1055,8 +1055,8 @@ pub(crate) fn consecutive_repetition_expression(s: Span) -> IResult<Span, Consec
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn consecutive_repetition_asterisk(s: Span) -> IResult<Span, ConsecutiveRepetition> {
     let (s, a) = bracket(symbol("*"))(s)?;
     Ok((
@@ -1065,8 +1065,8 @@ pub(crate) fn consecutive_repetition_asterisk(s: Span) -> IResult<Span, Consecut
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn consecutive_repetition_plus(s: Span) -> IResult<Span, ConsecutiveRepetition> {
     let (s, a) = bracket(symbol("+"))(s)?;
     Ok((
@@ -1075,22 +1075,22 @@ pub(crate) fn consecutive_repetition_plus(s: Span) -> IResult<Span, ConsecutiveR
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn non_consecutive_repetition(s: Span) -> IResult<Span, NonConsecutiveRepetition> {
     let (s, a) = bracket(pair(symbol("="), const_or_range_expression))(s)?;
     Ok((s, NonConsecutiveRepetition { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn goto_repetition(s: Span) -> IResult<Span, GotoRepetition> {
     let (s, a) = bracket(pair(symbol("->"), const_or_range_expression))(s)?;
     Ok((s, GotoRepetition { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn const_or_range_expression(s: Span) -> IResult<Span, ConstOrRangeExpression> {
     alt((
         map(cycle_delay_const_range_expression, |x| {
@@ -1102,8 +1102,8 @@ pub(crate) fn const_or_range_expression(s: Span) -> IResult<Span, ConstOrRangeEx
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn cycle_delay_const_range_expression(
     s: Span,
 ) -> IResult<Span, CycleDelayConstRangeExpression> {
@@ -1113,9 +1113,9 @@ pub(crate) fn cycle_delay_const_range_expression(
     ))(s)
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn cycle_delay_const_range_expression_binary(
     s: Span,
 ) -> IResult<Span, CycleDelayConstRangeExpression> {
@@ -1130,9 +1130,9 @@ pub(crate) fn cycle_delay_const_range_expression_binary(
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn cycle_delay_const_range_expression_dollar(
     s: Span,
 ) -> IResult<Span, CycleDelayConstRangeExpression> {
@@ -1147,17 +1147,17 @@ pub(crate) fn cycle_delay_const_range_expression_dollar(
     ))
 }
 
-#[recursive_parser]
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "recursive", recursive_parser)]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn expression_or_dist(s: Span) -> IResult<Span, ExpressionOrDist> {
     let (s, a) = expression(s)?;
     let (s, b) = opt(pair(keyword("dist"), brace(dist_list)))(s)?;
     Ok((s, ExpressionOrDist { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn assertion_variable_declaration(
     s: Span,
 ) -> IResult<Span, AssertionVariableDeclaration> {

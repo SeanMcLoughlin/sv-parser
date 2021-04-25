@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn action_block(s: Span) -> IResult<Span, ActionBlock> {
     alt((
         action_block_else,
@@ -13,8 +13,8 @@ pub(crate) fn action_block(s: Span) -> IResult<Span, ActionBlock> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn action_block_else(s: Span) -> IResult<Span, ActionBlock> {
     let (s, a) = opt(statement)(s)?;
     let (s, b) = keyword("else")(s)?;
@@ -25,8 +25,8 @@ pub(crate) fn action_block_else(s: Span) -> IResult<Span, ActionBlock> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn seq_block(s: Span) -> IResult<Span, SeqBlock> {
     let (s, a) = keyword("begin")(s)?;
     let (s, b) = opt(pair(symbol(":"), block_identifier))(s)?;
@@ -41,8 +41,8 @@ pub(crate) fn seq_block(s: Span) -> IResult<Span, SeqBlock> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn par_block(s: Span) -> IResult<Span, ParBlock> {
     let (s, a) = keyword("fork")(s)?;
     let (s, b) = opt(pair(symbol(":"), block_identifier))(s)?;
@@ -57,8 +57,8 @@ pub(crate) fn par_block(s: Span) -> IResult<Span, ParBlock> {
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn join_keyword(s: Span) -> IResult<Span, JoinKeyword> {
     alt((
         map(keyword("join_any"), |x| JoinKeyword::JoinAny(Box::new(x))),

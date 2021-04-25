@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn data_declaration(s: Span) -> IResult<Span, DataDeclaration> {
     alt((
         data_declaration_variable,
@@ -19,8 +19,8 @@ pub(crate) fn data_declaration(s: Span) -> IResult<Span, DataDeclaration> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn data_declaration_variable(s: Span) -> IResult<Span, DataDeclaration> {
     let (s, a) = opt(r#const)(s)?;
     let (s, b) = opt(var)(s)?;
@@ -36,8 +36,8 @@ pub(crate) fn data_declaration_variable(s: Span) -> IResult<Span, DataDeclaratio
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn data_type_or_implicit_data_declaration_variable(
     s: Span,
 ) -> IResult<Span, DataTypeOrImplicit> {
@@ -52,15 +52,15 @@ pub(crate) fn data_type_or_implicit_data_declaration_variable(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn r#const(s: Span) -> IResult<Span, Const> {
     let (s, a) = keyword("const")(s)?;
     Ok((s, Const { nodes: (a,) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn package_import_declaration(s: Span) -> IResult<Span, PackageImportDeclaration> {
     let (s, a) = keyword("import")(s)?;
     let (s, b) = list(symbol(","), package_import_item)(s)?;
@@ -68,14 +68,14 @@ pub(crate) fn package_import_declaration(s: Span) -> IResult<Span, PackageImport
     Ok((s, PackageImportDeclaration { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn package_import_item(s: Span) -> IResult<Span, PackageImportItem> {
     alt((package_import_item_identifier, package_import_item_asterisk))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn package_import_item_identifier(s: Span) -> IResult<Span, PackageImportItem> {
     let (s, a) = package_identifier(s)?;
     let (s, b) = symbol("::")(s)?;
@@ -86,8 +86,8 @@ pub(crate) fn package_import_item_identifier(s: Span) -> IResult<Span, PackageIm
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn package_import_item_asterisk(s: Span) -> IResult<Span, PackageImportItem> {
     let (s, a) = package_identifier(s)?;
     let (s, b) = symbol("::")(s)?;
@@ -98,8 +98,8 @@ pub(crate) fn package_import_item_asterisk(s: Span) -> IResult<Span, PackageImpo
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn package_export_declaration(s: Span) -> IResult<Span, PackageExportDeclaration> {
     alt((
         package_export_declaration_asterisk,
@@ -107,8 +107,8 @@ pub(crate) fn package_export_declaration(s: Span) -> IResult<Span, PackageExport
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn package_export_declaration_asterisk(
     s: Span,
 ) -> IResult<Span, PackageExportDeclaration> {
@@ -123,8 +123,8 @@ pub(crate) fn package_export_declaration_asterisk(
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn package_export_declaration_item(s: Span) -> IResult<Span, PackageExportDeclaration> {
     let (s, a) = keyword("export")(s)?;
     let (s, b) = list(symbol(","), package_import_item)(s)?;
@@ -135,8 +135,8 @@ pub(crate) fn package_export_declaration_item(s: Span) -> IResult<Span, PackageE
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn genvar_declaration(s: Span) -> IResult<Span, GenvarDeclaration> {
     let (s, a) = keyword("genvar")(s)?;
     let (s, b) = list_of_genvar_identifiers(s)?;
@@ -144,8 +144,8 @@ pub(crate) fn genvar_declaration(s: Span) -> IResult<Span, GenvarDeclaration> {
     Ok((s, GenvarDeclaration { nodes: (a, b, c) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn net_declaration(s: Span) -> IResult<Span, NetDeclaration> {
     alt((
         net_declaration_interconnect,
@@ -154,8 +154,8 @@ pub(crate) fn net_declaration(s: Span) -> IResult<Span, NetDeclaration> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn net_declaration_net_type(s: Span) -> IResult<Span, NetDeclaration> {
     let (s, a) = net_type(s)?;
     let (s, b) = opt(strength)(s)?;
@@ -172,8 +172,8 @@ pub(crate) fn net_declaration_net_type(s: Span) -> IResult<Span, NetDeclaration>
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn data_type_or_implicit_net_declaration_net_type(
     s: Span,
 ) -> IResult<Span, DataTypeOrImplicit> {
@@ -192,8 +192,8 @@ pub(crate) fn data_type_or_implicit_net_declaration_net_type(
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn strength(s: Span) -> IResult<Span, Strength> {
     alt((
         map(drive_strength, |x| Strength::Drive(Box::new(x))),
@@ -201,8 +201,8 @@ pub(crate) fn strength(s: Span) -> IResult<Span, Strength> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn vector_scalar(s: Span) -> IResult<Span, VectorScalar> {
     alt((
         map(keyword("vectored"), |x| VectorScalar::Vectored(Box::new(x))),
@@ -210,8 +210,8 @@ pub(crate) fn vector_scalar(s: Span) -> IResult<Span, VectorScalar> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn net_declaration_net_type_identifier(s: Span) -> IResult<Span, NetDeclaration> {
     let (s, a) = net_type_identifier(s)?;
     let (s, b) = opt(delay_control)(s)?;
@@ -225,8 +225,8 @@ pub(crate) fn net_declaration_net_type_identifier(s: Span) -> IResult<Span, NetD
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn net_declaration_interconnect(s: Span) -> IResult<Span, NetDeclaration> {
     let (s, a) = keyword("interconnect")(s)?;
     let (s, b) = implicit_data_type(s)?;
@@ -247,8 +247,8 @@ pub(crate) fn net_declaration_interconnect(s: Span) -> IResult<Span, NetDeclarat
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn type_declaration(s: Span) -> IResult<Span, TypeDeclaration> {
     alt((
         type_declaration_data_type,
@@ -257,8 +257,8 @@ pub(crate) fn type_declaration(s: Span) -> IResult<Span, TypeDeclaration> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn type_declaration_data_type(s: Span) -> IResult<Span, TypeDeclaration> {
     let (s, a) = keyword("typedef")(s)?;
     let (s, b) = data_type(s)?;
@@ -272,8 +272,8 @@ pub(crate) fn type_declaration_data_type(s: Span) -> IResult<Span, TypeDeclarati
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn type_declaration_interface(s: Span) -> IResult<Span, TypeDeclaration> {
     let (s, a) = keyword("typedef")(s)?;
     let (s, b) = interface_instance_identifier(s)?;
@@ -290,8 +290,8 @@ pub(crate) fn type_declaration_interface(s: Span) -> IResult<Span, TypeDeclarati
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn type_declaration_reserved(s: Span) -> IResult<Span, TypeDeclaration> {
     let (s, a) = keyword("typedef")(s)?;
     let (s, b) = opt(type_declaration_keyword)(s)?;
@@ -305,8 +305,8 @@ pub(crate) fn type_declaration_reserved(s: Span) -> IResult<Span, TypeDeclaratio
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn type_declaration_keyword(s: Span) -> IResult<Span, TypeDeclarationKeyword> {
     alt((
         map(keyword("enum"), |x| {
@@ -327,8 +327,8 @@ pub(crate) fn type_declaration_keyword(s: Span) -> IResult<Span, TypeDeclaration
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn net_type_declaration(s: Span) -> IResult<Span, NetTypeDeclaration> {
     alt((
         net_type_declaration_data_type,
@@ -336,8 +336,8 @@ pub(crate) fn net_type_declaration(s: Span) -> IResult<Span, NetTypeDeclaration>
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn net_type_declaration_data_type(s: Span) -> IResult<Span, NetTypeDeclaration> {
     let (s, a) = keyword("nettype")(s)?;
     let (s, b) = data_type(s)?;
@@ -356,8 +356,8 @@ pub(crate) fn net_type_declaration_data_type(s: Span) -> IResult<Span, NetTypeDe
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn net_type_declaration_net_type(s: Span) -> IResult<Span, NetTypeDeclaration> {
     let (s, a) = keyword("nettype")(s)?;
     let (s, b) = opt(package_scope_or_class_scope)(s)?;
@@ -372,8 +372,8 @@ pub(crate) fn net_type_declaration_net_type(s: Span) -> IResult<Span, NetTypeDec
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn lifetime(s: Span) -> IResult<Span, Lifetime> {
     alt((
         map(keyword("static"), |x| Lifetime::Static(Box::new(x))),

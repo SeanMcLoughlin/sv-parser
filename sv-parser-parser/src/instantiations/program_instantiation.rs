@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn program_instantiation(s: Span) -> IResult<Span, ProgramInstantiation> {
     let (s, a) = program_identifier(s)?;
     let (s, b) = opt(parameter_value_assignment)(s)?;

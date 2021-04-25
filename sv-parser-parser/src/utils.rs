@@ -305,8 +305,8 @@ where
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn white_space(s: Span) -> IResult<Span, WhiteSpace> {
     if in_directive() {
         map(multispace1, |x: Span| {

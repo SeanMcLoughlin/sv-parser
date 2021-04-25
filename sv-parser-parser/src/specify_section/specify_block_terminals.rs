@@ -2,8 +2,8 @@ use crate::*;
 
 // -----------------------------------------------------------------------------
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn specify_input_terminal_descriptor(
     s: Span,
 ) -> IResult<Span, SpecifyInputTerminalDescriptor> {
@@ -12,8 +12,8 @@ pub(crate) fn specify_input_terminal_descriptor(
     Ok((s, SpecifyInputTerminalDescriptor { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn specify_output_terminal_descriptor(
     s: Span,
 ) -> IResult<Span, SpecifyOutputTerminalDescriptor> {
@@ -22,8 +22,8 @@ pub(crate) fn specify_output_terminal_descriptor(
     Ok((s, SpecifyOutputTerminalDescriptor { nodes: (a, b) }))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn input_identifier(s: Span) -> IResult<Span, InputIdentifier> {
     alt((
         input_identifier_interface,
@@ -36,8 +36,8 @@ pub(crate) fn input_identifier(s: Span) -> IResult<Span, InputIdentifier> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn input_identifier_interface(s: Span) -> IResult<Span, InputIdentifier> {
     let (s, a) = interface_identifier(s)?;
     let (s, b) = symbol(".")(s)?;
@@ -48,8 +48,8 @@ pub(crate) fn input_identifier_interface(s: Span) -> IResult<Span, InputIdentifi
     ))
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn output_identifier(s: Span) -> IResult<Span, OutputIdentifier> {
     alt((
         output_identifier_interface,
@@ -62,8 +62,8 @@ pub(crate) fn output_identifier(s: Span) -> IResult<Span, OutputIdentifier> {
     ))(s)
 }
 
-#[tracable_parser]
-#[packrat_parser]
+#[cfg_attr(feature = "trace", tracable_parser)]
+#[cfg_attr(feature = "packrat", packrat_parser)]
 pub(crate) fn output_identifier_interface(s: Span) -> IResult<Span, OutputIdentifier> {
     let (s, a) = interface_identifier(s)?;
     let (s, b) = symbol(".")(s)?;
